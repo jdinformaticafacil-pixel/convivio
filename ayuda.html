@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Convivio — Ayuda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --g:#1A8C68;--gl:#E8F5F0;--gm:#4DB892;
+  --tx:#1A1A18;--mu:#6B6B67;--bd:#E2E2DC;
+  --bg:#FAFAF7;--wh:#FFFFFF;--r:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100dvh}
+
+/* ── BOTÓN DE AYUDA (flota sobre la app) ── */
+.help-fab{
+  position:fixed;bottom:88px;right:18px;z-index:300;
+  width:48px;height:48px;border-radius:50%;
+  background:var(--g);color:#fff;border:none;
+  font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 16px rgba(26,140,104,.35);
+  transition:transform .15s,opacity .15s;
+  font-family:'DM Sans',sans-serif;
+}
+.help-fab:hover{transform:scale(1.08)}
+.help-fab-label{
+  position:fixed;bottom:94px;right:72px;z-index:300;
+  background:var(--tx);color:#fff;font-size:12px;
+  padding:5px 10px;border-radius:20px;white-space:nowrap;
+  pointer-events:none;opacity:0;transform:translateX(6px);
+  transition:opacity .2s,transform .2s;
+}
+.help-fab:hover + .help-label-anchor .help-fab-label,
+.help-fab-label.show{opacity:1;transform:translateX(0)}
+
+/* ── PANEL DE AYUDA ── */
+.help-panel{
+  position:fixed;inset:0;z-index:400;
+  display:flex;align-items:flex-end;justify-content:flex-end;
+  pointer-events:none;
+}
+.help-panel.open{pointer-events:all}
+.help-backdrop{
+  position:absolute;inset:0;background:rgba(0,0,0,.45);
+  opacity:0;transition:opacity .25s;
+}
+.help-panel.open .help-backdrop{opacity:1}
+.help-drawer{
+  position:relative;z-index:1;
+  width:100%;max-width:420px;
+  height:100dvh;
+  background:var(--wh);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+  border-left:1px solid var(--bd);
+}
+.help-panel.open .help-drawer{transform:translateX(0)}
+
+/* HEADER */
+.help-hdr{
+  padding:16px 20px 14px;
+  border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.help-hdr-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:400}
+.help-hdr-logo b{color:var(--g);font-weight:400}
+.help-close{background:none;border:none;cursor:pointer;font-size:20px;color:var(--mu);padding:4px;border-radius:8px;transition:background .15s}
+.help-close:hover{background:var(--bg)}
+
+/* TABS */
+.help-tabs{display:flex;border-bottom:1px solid var(--bd);flex-shrink:0}
+.htab{flex:1;padding:11px;border:none;background:transparent;font-size:13px;color:var(--mu);cursor:pointer;font-family:'DM Sans',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.htab.on{color:var(--g);font-weight:500;border-bottom-color:var(--g)}
+
+/* CONTENT */
+.help-content{flex:1;overflow-y:auto}
+.htab-content{display:none;padding:0}
+.htab-content.on{display:block}
+
+/* ── TOUR VIRTUAL ── */
+.tour-wrap{padding:0}
+
+/* Progress del tour */
+.tour-progress{
+  padding:14px 20px 10px;
+  border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;gap:10px;
+  flex-shrink:0;
+  background:var(--wh);
+  position:sticky;top:0;z-index:2;
+}
+.tour-steps-dots{display:flex;gap:5px}
+.tdot{width:24px;height:3px;border-radius:2px;background:var(--bd);transition:all .3s;cursor:pointer}
+.tdot.done{background:var(--gm)}
+.tdot.current{background:var(--g);width:32px}
+.tour-step-label{font-size:12px;color:var(--mu);margin-left:auto}
+
+/* STEP */
+.tour-step{display:none;flex-direction:column}
+.tour-step.on{display:flex}
+
+/* MOCKUP del paso */
+.step-mockup{
+  background:var(--bg);
+  border-bottom:1px solid var(--bd);
+  padding:20px;
+  display:flex;align-items:center;justify-content:center;
+  min-height:240px;
+  position:relative;
+  overflow:hidden;
+}
+
+/* Mockups internos */
+.mock-phone{
+  width:200px;background:var(--wh);border:1px solid var(--bd);
+  border-radius:18px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.08);
+}
+.mock-topbar{background:var(--wh);border-bottom:1px solid var(--bd);padding:8px 12px;display:flex;align-items:center;justify-content:space-between}
+.mock-logo{font-family:'Fraunces',serif;font-size:13px}
+.mock-logo b{color:var(--g);font-weight:400}
+.mock-tabs{display:flex;gap:2px;background:var(--bg);border-radius:6px;padding:2px}
+.mock-tab{padding:2px 6px;border-radius:4px;font-size:9px;color:var(--mu)}
+.mock-tab.on{background:var(--wh);color:var(--tx);font-weight:500}
+
+/* Tarjeta de perfil mini */
+.mock-card{margin:8px;background:var(--wh);border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.mock-card-photo{height:90px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:36px;position:relative}
+.mock-compat{position:absolute;top:6px;right:6px;background:rgba(255,255,255,.9);border-radius:10px;padding:2px 6px;font-size:8px;font-weight:500;color:var(--g)}
+.mock-card-body{padding:8px}
+.mock-card-name{font-family:'Fraunces',serif;font-size:12px;margin-bottom:1px}
+.mock-card-role{font-size:9px;color:var(--mu);margin-bottom:5px}
+.mock-card-chips{display:flex;gap:3px;flex-wrap:wrap;margin-bottom:5px}
+.mock-chip{font-size:8px;padding:2px 5px;border-radius:6px;background:var(--gl);color:var(--g)}
+.mock-actions{display:flex;justify-content:center;gap:10px;padding:8px}
+.mock-btn{width:32px;height:32px;border-radius:50%;border:1px solid var(--bd);background:var(--wh);display:flex;align-items:center;justify-content:center;font-size:12px}
+.mock-btn.like{border-color:#9FE1CB;color:var(--g)}
+.mock-btn.pass{border-color:#F0C0C0;color:#C94040}
+
+/* Panel de filtros mini */
+.mock-filters{margin:8px;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:8px}
+.mock-filter-title{font-size:9px;font-weight:500;color:var(--mu);margin-bottom:6px;letter-spacing:.3px}
+.mock-filter-row{display:flex;align-items:center;gap:4px;margin-bottom:4px}
+.mock-filter-label{font-size:9px;color:var(--mu);width:48px}
+.mock-filter-track{flex:1;height:2px;background:var(--bd);border-radius:1px;overflow:hidden}
+.mock-filter-fill{height:100%;background:var(--g);border-radius:1px}
+.mock-filter-val{font-size:8px;font-weight:500;min-width:24px;text-align:right}
+
+/* Chat mock */
+.mock-chat{margin:8px;display:flex;flex-direction:column;gap:5px}
+.mock-msg{padding:5px 8px;border-radius:10px;font-size:9px;line-height:1.4;max-width:80%}
+.mock-msg-them{background:var(--bg);border:1px solid var(--bd);align-self:flex-start;border-bottom-left-radius:2px}
+.mock-msg-me{background:var(--g);color:#fff;align-self:flex-end;border-bottom-right-radius:2px}
+
+/* Match popup mini */
+.mock-match{margin:8px;background:var(--wh);border:1px solid var(--gm);border-radius:12px;padding:12px;text-align:center}
+.mock-match-icon{font-size:24px;margin-bottom:4px}
+.mock-match-title{font-family:'Fraunces',serif;font-size:14px;color:var(--g);margin-bottom:2px}
+.mock-match-sub{font-size:8px;color:var(--mu);margin-bottom:6px}
+.mock-match-btn{background:var(--g);color:#fff;border:none;border-radius:10px;padding:5px 12px;font-size:9px;cursor:default}
+
+/* Estados matches mock */
+.mock-states{margin:8px;display:flex;flex-direction:column;gap:5px}
+.mock-state-item{background:var(--wh);border:1px solid var(--bd);border-radius:8px;padding:7px;display:flex;align-items:center;gap:6px}
+.mock-state-av{width:28px;height:28px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.mock-state-info{flex:1;min-width:0}
+.mock-state-name{font-size:10px;font-weight:500}
+.mock-state-sub{font-size:8px;color:var(--mu)}
+.mock-state-badge{font-size:8px;padding:2px 5px;border-radius:6px;white-space:nowrap}
+.badge-pending{background:#FAEEDA;color:#854F0B}
+.badge-mutual{background:var(--gl);color:var(--g)}
+.badge-sent{background:#E6F1FB;color:#185FA5}
+
+/* Highlight arrow animado */
+.step-arrow{
+  position:absolute;
+  font-size:20px;
+  animation:bounce-arrow 1s ease-in-out infinite;
+}
+@keyframes bounce-arrow{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* STEP BODY */
+.step-body{padding:20px}
+.step-num{font-size:11px;color:var(--g);font-weight:500;letter-spacing:.5px;margin-bottom:6px}
+.step-title{font-family:'Fraunces',serif;font-size:20px;font-weight:400;margin-bottom:8px;line-height:1.25}
+.step-desc{font-size:14px;color:var(--mu);line-height:1.7;margin-bottom:16px}
+.step-tips{display:flex;flex-direction:column;gap:7px;margin-bottom:16px}
+.tip-row{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--tx)}
+.tip-icon{font-size:15px;flex-shrink:0;margin-top:1px}
+.tip-text{line-height:1.5;color:var(--mu)}
+.tip-text strong{color:var(--tx)}
+
+/* NAVEGACIÓN DEL TOUR */
+.tour-nav{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-top:1px solid var(--bd);flex-shrink:0;background:var(--wh)}
+.btn-tour-prev{padding:9px 18px;border-radius:22px;border:1px solid var(--bd);background:transparent;font-size:14px;color:var(--mu);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-tour-prev:hover{border-color:var(--tx);color:var(--tx)}
+.btn-tour-prev:disabled{opacity:.3;cursor:default}
+.btn-tour-next{padding:9px 22px;border-radius:22px;background:var(--g);color:#fff;border:none;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s}
+.btn-tour-next:hover{opacity:.85}
+.btn-tour-finish{padding:9px 22px;border-radius:22px;background:var(--tx);color:#fff;border:none;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* ── FAQ ── */
+.faq-list{padding:16px 20px;display:flex;flex-direction:column;gap:6px}
+.faq-item{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;transition:border-color .15s}
+.faq-item.open{border-color:var(--gm)}
+.faq-q{padding:14px 16px;font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;user-select:none}
+.faq-q:hover{background:var(--bg)}
+.faq-icon{font-size:16px;color:var(--mu);transition:transform .2s;flex-shrink:0}
+.faq-item.open .faq-icon{transform:rotate(45deg);color:var(--g)}
+.faq-a{display:none;padding:0 16px 14px;font-size:13px;color:var(--mu);line-height:1.7}
+.faq-item.open .faq-a{display:block}
+
+/* ── CONTACTO ── */
+.contact-wrap{padding:20px}
+.contact-card{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);padding:18px;text-align:center;margin-bottom:12px}
+.contact-icon{font-size:32px;margin-bottom:8px}
+.contact-title{font-size:15px;font-weight:500;margin-bottom:4px}
+.contact-sub{font-size:13px;color:var(--mu);margin-bottom:12px;line-height:1.5}
+.btn-contact{display:inline-block;background:var(--g);color:#fff;padding:9px 22px;border-radius:20px;font-size:13px;font-weight:500;text-decoration:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* ── MOBILE ── */
+@media(max-width:640px){
+  .help-drawer{max-width:100%;border-left:none;border-top:1px solid var(--bd);border-radius:20px 20px 0 0;height:92dvh}
+  .help-panel{align-items:flex-end}
+}
+</style>
+</head>
+<body>
+
+<!-- DEMO: simula la app detrás -->
+<div style="padding:80px 24px;text-align:center;color:var(--mu);font-size:14px">
+  <div style="font-family:'Fraunces',serif;font-size:28px;color:var(--tx);margin-bottom:8px">con<b style="color:var(--g);font-weight:400">vivio</b></div>
+  <p>Esta página demuestra el botón de ayuda.<br>En la app real flota sobre todas las pantallas.</p>
+  <p style="margin-top:16px;font-size:13px">Pulsa el botón <strong>?</strong> abajo a la derecha →</p>
+</div>
+
+<!-- BOTÓN FLOTANTE DE AYUDA -->
+<button class="help-fab" onclick="openHelp()" aria-label="Ayuda" id="helpFab">?</button>
+
+<!-- PANEL DE AYUDA -->
+<div class="help-panel" id="helpPanel">
+  <div class="help-backdrop" onclick="closeHelp()"></div>
+  <div class="help-drawer">
+
+    <div class="help-hdr">
+      <div class="help-hdr-logo">con<b>vivio</b> · Ayuda</div>
+      <button class="help-close" onclick="closeHelp()" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="help-tabs">
+      <button class="htab on" onclick="switchHTab(this,'tour')">🎯 Tour rápido</button>
+      <button class="htab" onclick="switchHTab(this,'faq')">❓ Preguntas</button>
+      <button class="htab" onclick="switchHTab(this,'contacto')">✉️ Contacto</button>
+    </div>
+
+    <div class="help-content">
+
+      <!-- ══════════════ TOUR VIRTUAL ══════════════ -->
+      <div class="htab-content on" id="hc-tour">
+        <div class="tour-wrap">
+
+          <div class="tour-progress">
+            <div class="tour-steps-dots" id="tourDots"></div>
+            <span class="tour-step-label" id="tourLabel">1 de 6</span>
+          </div>
+
+          <!-- PASO 1: Bienvenida -->
+          <div class="tour-step on" id="tstep-0">
+            <div class="step-mockup">
+              <div class="mock-phone">
+                <div class="mock-topbar">
+                  <div class="mock-logo">con<b>vivio</b></div>
+                  <div class="mock-tabs">
+                    <div class="mock-tab on">Personas</div>
+                    <div class="mock-tab">Pisos</div>
+                    <div class="mock-tab">Matches</div>
+                  </div>
+                </div>
+                <div style="padding:8px">
+                  <div style="background:var(--wh);border:1px solid var(--gm);border-radius:8px;padding:7px;margin-bottom:6px;font-size:9px;display:flex;align-items:center;gap:6px">
+                    <span style="font-size:14px">🧑‍🎨👩‍⚕️</span>
+                    <div><strong style="color:var(--g)">2 personas</strong> esperan tu respuesta</div>
+                  </div>
+                  <div class="mock-card">
+                    <div class="mock-card-photo">🧑‍🎨<span class="mock-compat">⚡ 91%</span></div>
+                    <div class="mock-card-body">
+                      <div class="mock-card-name">Lucía, 26</div>
+                      <div class="mock-card-role">Diseñadora · Madrid</div>
+                      <div class="mock-card-chips"><span class="mock-chip">No fuma</span><span class="mock-chip">Ordenada</span></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="mock-actions">
+                  <div class="mock-btn pass">✕</div>
+                  <div class="mock-btn like">♥</div>
+                </div>
+              </div>
+            </div>
+            <div class="step-body">
+              <div class="step-num">PASO 1 DE 6 · BIENVENIDA</div>
+              <div class="step-title">¿Cómo funciona Convivio?</div>
+              <div class="step-desc">Convivio te ayuda a encontrar personas <strong>realmente compatibles</strong> para compartir piso. No es un portal de anuncios — es un sistema de matching por hábitos de convivencia.</div>
+              <div class="step-tips">
+                <div class="tip-row"><span class="tip-icon">🎯</span><div class="tip-text">El núcleo es encontrar <strong>con quién</strong> vivir, no solo dónde.</div></div>
+                <div class="tip-row"><span class="tip-icon">⚡</span><div class="tip-text">Calculamos un <strong>% de compatibilidad</strong> real basado en tus hábitos.</div></div>
+                <div class="tip-row"><span class="tip-icon">💬</span><div class="tip-text">El chat solo se abre si <strong>ambos os dais like</strong> (match mutuo).</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 2: Filtros duros -->
+          <div class="tour-step" id="tstep-1">
+            <div class="step-mockup">
+              <div class="mock-phone">
+                <div class="mock-topbar">
+                  <div class="mock-logo">con<b>vivio</b></div>
+                  <span style="font-size:9px;color:var(--mu)">Filtros</span>
+                </div>
+                <div class="mock-filters">
+                  <div class="mock-filter-title">FILTROS DUROS · Excluyen perfiles</div>
+                  <div class="mock-filter-row">
+                    <span class="mock-filter-label">Ciudad</span>
+                    <div class="mock-filter-track"><div class="mock-filter-fill" style="width:100%"></div></div>
+                    <span class="mock-filter-val" style="color:var(--g)">Madrid</span>
+                  </div>
+                  <div class="mock-filter-row">
+                    <span class="mock-filter-label">Presupuesto</span>
+                    <div class="mock-filter-track"><div class="mock-filter-fill" style="width:70%"></div></div>
+                    <span class="mock-filter-val">600€</span>
+                  </div>
+                  <div style="display:flex;gap:4px;margin-top:5px">
+                    <div style="padding:2px 6px;border-radius:6px;background:var(--tx);color:#fff;font-size:8px">No fumador</div>
+                    <div style="padding:2px 6px;border-radius:6px;border:1px solid var(--bd);font-size:8px;color:var(--mu)">Sin mascotas</div>
+                  </div>
+                </div>
+                <div class="mock-filters" style="margin:0 8px 8px">
+                  <div class="mock-filter-title">PESOS BLANDOS · Ordenan el feed</div>
+                  <div class="mock-filter-row">
+                    <span class="mock-filter-label">Limpieza</span>
+                    <div class="mock-filter-track"><div class="mock-filter-fill" style="width:100%"></div></div>
+                    <span class="mock-filter-val">Mucho</span>
+                  </div>
+                  <div class="mock-filter-row">
+                    <span class="mock-filter-label">Horario</span>
+                    <div class="mock-filter-track"><div class="mock-filter-fill" style="width:50%"></div></div>
+                    <span class="mock-filter-val">Normal</span>
+                  </div>
+                </div>
+              </div>
+              <div class="step-arrow" style="right:20px;top:60px">👈</div>
+            </div>
+            <div class="step-body">
+              <div class="step-num">PASO 2 DE 6 · FILTROS</div>
+              <div class="step-title">Filtros duros vs. pesos blandos</div>
+              <div class="step-desc">Hay dos tipos de filtros. Entenderlos te ayuda a conseguir mejores matches.</div>
+              <div class="step-tips">
+                <div class="tip-row"><span class="tip-icon">🚫</span><div class="tip-text"><strong>Filtros duros</strong> — excluyen perfiles directamente. Si activas "No fumador", nunca verás fumadores.</div></div>
+                <div class="tip-row"><span class="tip-icon">⚖️</span><div class="tip-text"><strong>Pesos blandos</strong> — ordenan los resultados. Si "Limpieza" está al máximo, los perfiles muy ordenados aparecen primero.</div></div>
+                <div class="tip-row"><span class="tip-icon">💡</span><div class="tip-text">Puedes ajustar los pesos en cualquier momento desde el panel de filtros (escritorio) o desde tu perfil.</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 3: Swipe -->
+          <div class="tour-step" id="tstep-2">
+            <div class="step-mockup">
+              <div class="mock-phone">
+                <div class="mock-topbar">
+                  <div class="mock-logo">con<b>vivio</b></div>
+                  <div class="mock-tabs"><div class="mock-tab on">Personas</div><div class="mock-tab">Pisos</div></div>
+                </div>
+                <div style="padding:8px">
+                  <div class="mock-card" style="position:relative">
+                    <div class="mock-card-photo" style="height:80px">👩‍⚕️<span class="mock-compat">⚡ 88%</span>
+                      <div style="position:absolute;top:8px;left:8px;background:rgba(255,255,255,.9);border-radius:6px;padding:2px 6px;font-size:7px;font-weight:700;color:var(--g);border:1px solid var(--g);transform:rotate(-10deg)">LIKE</div>
+                    </div>
+                    <div class="mock-card-body">
+                      <div class="mock-card-name">Paula, 27</div>
+                      <div class="mock-card-role">Médica residente</div>
+                      <div class="mock-card-chips"><span class="mock-chip">Madrugadora</span><span class="mock-chip">Ordenada</span></div>
+                    </div>
+                  </div>
+                  <div style="font-size:8px;color:var(--mu);text-align:center;margin-top:5px">← Arrastra para decidir →</div>
+                </div>
+                <div class="mock-actions">
+                  <div class="mock-btn" style="font-size:10px">↩</div>
+                  <div class="mock-btn pass">✕</div>
+                  <div class="mock-btn like" style="width:36px;height:36px">♥</div>
+                  <div class="mock-btn" style="font-size:10px;color:#3478C8;border-color:#B5D4F4">★</div>
+                </div>
+              </div>
+            </div>
+            <div class="step-body">
+              <div class="step-num">PASO 3 DE 6 · EXPLORAR</div>
+              <div class="step-title">Desliza perfiles para decidir</div>
+              <div class="step-desc">Los perfiles aparecen ordenados por % de compatibilidad. Los más afines van primero.</div>
+              <div class="step-tips">
+                <div class="tip-row"><span class="tip-icon">♥</span><div class="tip-text"><strong>Like</strong> — me interesa esta persona como compañero/a.</div></div>
+                <div class="tip-row"><span class="tip-icon">✕</span><div class="tip-text"><strong>Pass</strong> — no me parece la persona adecuada ahora.</div></div>
+                <div class="tip-row"><span class="tip-icon">★</span><div class="tip-text"><strong>Super like</strong> — me interesa mucho. La otra persona recibe una notificación especial.</div></div>
+                <div class="tip-row"><span class="tip-icon">↩</span><div class="tip-text"><strong>Deshacer</strong> — si te arrepientes del último swipe.</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 4: Match -->
+          <div class="tour-step" id="tstep-3">
+            <div class="step-mockup">
+              <div class="mock-phone">
+                <div class="mock-topbar"><div class="mock-logo">con<b>vivio</b></div></div>
+                <div style="padding:8px">
+                  <div class="mock-match">
+                    <div class="mock-match-icon">🎉</div>
+                    <div class="mock-match-title">¡Match!</div>
+                    <div style="font-size:14px;font-weight:500;color:var(--g);margin:3px 0 4px">91% compatibles</div>
+                    <div class="mock-match-sub">Tú y Paula os habéis dado like mutuamente. ¡El chat está abierto!</div>
+                    <button class="mock-match-btn">Enviar primer mensaje</button>
+                  </div>
+                  <div style="margin-top:8px;font-size:9px;color:var(--mu);text-align:center">Con propietarios de pisos puedes<br>escribir sin match previo</div>
+                </div>
+              </div>
+            </div>
+            <div class="step-body">
+              <div class="step-num">PASO 4 DE 6 · MATCH</div>
+              <div class="step-title">¿Cuándo se abre el chat?</div>
+              <div class="step-desc">El sistema de chat tiene dos reglas distintas según con quién estés hablando.</div>
+              <div class="step-tips">
+                <div class="tip-row"><span class="tip-icon">👥</span><div class="tip-text"><strong>Entre personas</strong> — match mutuo obligatorio. Los dos deben darse like para hablar. Evita mensajes no deseados.</div></div>
+                <div class="tip-row"><span class="tip-icon">🏠</span><div class="tip-text"><strong>Con propietarios</strong> — contacto libre. Si ves una habitación que te gusta, puedes escribir directamente sin esperar match.</div></div>
+                <div class="tip-row"><span class="tip-icon">⏳</span><div class="tip-text">Si alguien te dio like, aparece en <strong>"Esperando tu respuesta"</strong>. Decide antes de seguir explorando.</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 5: Estados / Matches -->
+          <div class="tour-step" id="tstep-4">
+            <div class="step-mockup">
+              <div class="mock-phone">
+                <div class="mock-topbar">
+                  <div class="mock-logo">con<b>vivio</b></div>
+                  <div class="mock-tabs"><div class="mock-tab">Personas</div><div class="mock-tab">Pisos</div><div class="mock-tab on">Matches</div></div>
+                </div>
+                <div class="mock-states">
+                  <div style="font-size:8px;font-weight:500;color:var(--mu);padding:4px 0 2px;letter-spacing:.4px">ESPERANDO RESPUESTA</div>
+                  <div class="mock-state-item">
+                    <div class="mock-state-av">🧑‍🎨</div>
+                    <div class="mock-state-info"><div class="mock-state-name">Lucía</div><div class="mock-state-sub">Te dio like · ⚡91%</div></div>
+                    <div class="mock-state-badge badge-pending">⏳ Pendiente</div>
+                  </div>
+                  <div style="font-size:8px;font-weight:500;color:var(--mu);padding:4px 0 2px;letter-spacing:.4px">MATCHES MUTUOS</div>
+                  <div class="mock-state-item">
+                    <div class="mock-state-av">👩‍⚕️</div>
+                    <div class="mock-state-info"><div class="mock-state-name">Paula</div><div class="mock-state-sub">¿Cuándo puedes ver el piso?</div></div>
+                    <div class="mock-state-badge badge-mutual">✅ Chat abierto</div>
+                  </div>
+                  <div style="font-size:8px;font-weight:500;color:var(--mu);padding:4px 0 2px;letter-spacing:.4px">LIKES ENVIADOS</div>
+                  <div class="mock-state-item">
+                    <div class="mock-state-av">👨‍💻</div>
+                    <div class="mock-state-info"><div class="mock-state-name">Marcos</div><div class="mock-state-sub">Esperando su respuesta...</div></div>
+                    <div class="mock-state-badge badge-sent">📤 Enviado</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="step-body">
+              <div class="step-num">PASO 5 DE 6 · ESTADOS</div>
+              <div class="step-title">Tres estados en tu bandeja</div>
+              <div class="step-desc">La pestaña Matches agrupa todo en tres secciones para que sepas exactamente qué ha pasado con cada persona.</div>
+              <div class="step-tips">
+                <div class="tip-row"><span class="tip-icon">⏳</span><div class="tip-text"><strong>Esperando tu respuesta</strong> — alguien te dio like. Tú decides si hay match.</div></div>
+                <div class="tip-row"><span class="tip-icon">✅</span><div class="tip-text"><strong>Matches mutuos</strong> — chat abierto. Podéis hablar libremente y coordinar una visita.</div></div>
+                <div class="tip-row"><span class="tip-icon">📤</span><div class="tip-text"><strong>Likes enviados</strong> — le diste like a alguien. Cuando responda, aparecerá en matches mutuos.</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 6: Verificación y siguiente paso -->
+          <div class="tour-step" id="tstep-5">
+            <div class="step-mockup" style="background:var(--tx)">
+              <div style="text-align:center;color:#fff">
+                <div style="font-size:48px;margin-bottom:12px">🎉</div>
+                <div style="font-family:'Fraunces',serif;font-size:20px;margin-bottom:8px">¡Ya sabes cómo funciona!</div>
+                <div style="font-size:13px;color:rgba(255,255,255,.6);line-height:1.6;max-width:200px;margin:0 auto">Ahora completa tu perfil para conseguir mejores matches</div>
+                <div style="display:flex;justify-content:center;gap:12px;margin-top:16px;font-size:11px">
+                  <div style="text-align:center;color:rgba(255,255,255,.5)">
+                    <div style="font-size:20px;margin-bottom:3px">✅</div>Email verificado
+                  </div>
+                  <div style="text-align:center;color:var(--gm)">
+                    <div style="font-size:20px;margin-bottom:3px">🛡</div>ID verificado
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="step-body">
+              <div class="step-num">PASO 6 DE 6 · CONFIANZA</div>
+              <div class="step-title">Verificación y próximos pasos</div>
+              <div class="step-desc">Los perfiles verificados generan más confianza y consiguen más matches. Hay dos niveles.</div>
+              <div class="step-tips">
+                <div class="tip-row"><span class="tip-icon">✅</span><div class="tip-text"><strong>Email verificado</strong> — confirmas que el email es tuyo. Básico y obligatorio al registrarte.</div></div>
+                <div class="tip-row"><span class="tip-icon">🛡</span><div class="tip-text"><strong>Verificado con ID</strong> — subes una foto del DNI. Badge especial visible en tu perfil. Muy recomendado.</div></div>
+                <div class="tip-row"><span class="tip-icon">📸</span><div class="tip-text">Perfiles con foto y bio completa reciben <strong>3 veces más likes</strong>. Completa tu perfil al máximo.</div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NAVEGACIÓN -->
+          <div class="tour-nav">
+            <button class="btn-tour-prev" id="btnPrev" onclick="tourPrev()" disabled>← Anterior</button>
+            <button class="btn-tour-next" id="btnNext" onclick="tourNext()">Siguiente →</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══════════════ FAQ ══════════════ -->
+      <div class="htab-content" id="hc-faq">
+        <div class="faq-list">
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">¿Es gratis Convivio?<span class="faq-icon">+</span></div>
+            <div class="faq-a">Sí, completamente gratis en la fase beta actual. En el futuro puede haber funciones premium, pero el matching y el chat siempre serán accesibles de forma gratuita.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">¿Cómo se calcula el % de compatibilidad?<span class="faq-icon">+</span></div>
+            <div class="faq-a">Combinamos filtros duros (ciudad, presupuesto, fumador) con factores blandos ponderables (horario, limpieza, ruido, teletrabajo). Tú puedes ajustar cuánto pesa cada factor desde el panel de filtros. El score va de 0 a 100.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">¿Puede alguien escribirme sin que yo quiera?<span class="faq-icon">+</span></div>
+            <div class="faq-a">Entre personas, no. El chat solo se abre si los dos os dais like (match mutuo). La excepción es para pisos: si tienes una habitación publicada, cualquier interesado puede escribirte directamente.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">¿Puedo cambiar mi rol después de registrarme?<span class="faq-icon">+</span></div>
+            <div class="faq-a">Sí. Puedes cambiar entre "Busco compañero/a", "Busco habitación" y "Ofrezco habitación" desde los ajustes de tu perfil en cualquier momento.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">¿Qué pasa si doy like a alguien pero no me responde?<span class="faq-icon">+</span></div>
+            <div class="faq-a">Tu like queda guardado en "Likes enviados". Si esa persona también te da like más adelante, se crea el match automáticamente. No hay límite de tiempo.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">¿Cómo consigo el badge de verificado con ID?<span class="faq-icon">+</span></div>
+            <div class="faq-a">Ve a tu perfil → Verificación → y sube una foto del DNI y un selfie. El proceso de revisión tarda menos de 24 horas. Una vez verificado, el badge aparece en tu tarjeta.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">¿Mis datos personales están seguros?<span class="faq-icon">+</span></div>
+            <div class="faq-a">Sí. Los datos del DNI se usan solo para verificar identidad y se eliminan tras el proceso. Los datos de convivencia son privados y solo se comparten de forma anónima para calcular la compatibilidad.</div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFaq(this)">¿Puedo reportar un perfil falso o sospechoso?<span class="faq-icon">+</span></div>
+            <div class="faq-a">Sí. En cualquier tarjeta de perfil hay un botón de reportar (⋯). El equipo de moderación revisa todos los reportes en menos de 48 horas.</div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ══════════════ CONTACTO ══════════════ -->
+      <div class="htab-content" id="hc-contacto">
+        <div class="contact-wrap">
+          <div class="contact-card">
+            <div class="contact-icon">💬</div>
+            <div class="contact-title">Chat de soporte</div>
+            <div class="contact-sub">Respuesta en menos de 24 horas en días laborables. El equipo de Convivio te ayuda con cualquier duda.</div>
+            <button class="btn-contact" onclick="alert('Soporte no disponible en la demo')">Abrir chat →</button>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">✉️</div>
+            <div class="contact-title">Email</div>
+            <div class="contact-sub">Para temas de privacidad, verificación o reportes urgentes.</div>
+            <a class="btn-contact" href="mailto:hola@convivio.app">hola@convivio.app</a>
+          </div>
+          <div class="contact-card">
+            <div class="contact-icon">🐛</div>
+            <div class="contact-title">Reportar un error</div>
+            <div class="contact-sub">¿Encontraste algo que no funciona bien? Cuéntanoslo para mejorarlo.</div>
+            <button class="btn-contact" onclick="alert('Formulario de bugs próximamente')">Reportar bug →</button>
+          </div>
+          <div style="text-align:center;font-size:12px;color:var(--mu);margin-top:8px;line-height:1.6">
+            Convivio está en fase beta · versión 0.3<br>
+            © 2025 Convivio · <a href="#" style="color:var(--g)">Privacidad</a> · <a href="#" style="color:var(--g)">Términos</a>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end help-content -->
+  </div><!-- end help-drawer -->
+</div><!-- end help-panel -->
+
+<script>
+/* ══════════════════════════════
+   PANEL DE AYUDA
+══════════════════════════════ */
+function openHelp(){document.getElementById('helpPanel').classList.add('open');}
+function closeHelp(){document.getElementById('helpPanel').classList.remove('open');}
+
+function switchHTab(btn, id){
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.htab-content').forEach(c=>c.classList.remove('on'));
+  document.getElementById('hc-'+id).classList.add('on');
+}
+
+/* ══════════════════════════════
+   TOUR VIRTUAL
+══════════════════════════════ */
+const TOTAL_TSTEPS = 6;
+let currentTStep = 0;
+
+function renderTourDots(){
+  const dots = document.getElementById('tourDots');
+  dots.innerHTML = Array.from({length:TOTAL_TSTEPS},(_,i)=>
+    `<div class="tdot ${i<currentTStep?'done':i===currentTStep?'current':''}" onclick="goTStep(${i})"></div>`
+  ).join('');
+  document.getElementById('tourLabel').textContent = `${currentTStep+1} de ${TOTAL_TSTEPS}`;
+}
+
+function goTStep(n){
+  document.querySelectorAll('.tour-step').forEach(s=>s.classList.remove('on'));
+  document.getElementById('tstep-'+n).classList.add('on');
+  currentTStep = n;
+  renderTourDots();
+  document.getElementById('btnPrev').disabled = n===0;
+  const nextBtn = document.getElementById('btnNext');
+  if(n===TOTAL_TSTEPS-1){
+    nextBtn.style.display='none';
+    // Mostrar botón de finalizar si no existe
+    let fin = document.getElementById('btnFinish');
+    if(!fin){
+      fin=document.createElement('button');
+      fin.id='btnFinish';fin.className='btn-tour-finish';
+      fin.textContent='¡Entendido! Ir a la app';
+      fin.onclick=()=>{closeHelp();currentTStep=0;goTStep(0);};
+      document.querySelector('.tour-nav').appendChild(fin);
+    }
+    fin.style.display='inline-block';
+  } else {
+    nextBtn.style.display='inline-block';
+    const fin=document.getElementById('btnFinish');
+    if(fin)fin.style.display='none';
+  }
+  // Scroll al top del contenido
+  document.querySelector('.help-content').scrollTop=0;
+}
+
+function tourNext(){if(currentTStep<TOTAL_TSTEPS-1)goTStep(currentTStep+1);}
+function tourPrev(){if(currentTStep>0)goTStep(currentTStep-1);}
+
+/* ══════════════════════════════
+   FAQ
+══════════════════════════════ */
+function toggleFaq(qEl){
+  const item = qEl.parentElement;
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
+  if(!wasOpen) item.classList.add('open');
+}
+
+/* INIT */
+renderTourDots();
+</script>
+</body>
+</html>

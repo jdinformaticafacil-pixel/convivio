@@ -5,70 +5,113 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Convivio — App</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
 <style>
-:root{
-  --g:#1A8C68;--gl:#E8F5F0;--gm:#4DB892;
-  --tx:#1A1A18;--mu:#6B6B67;--bd:#E2E2DC;
-  --bg:#FAFAF7;--wh:#FFFFFF;
-  --r:14px;--danger:#C94040;
-}
+:root{--g:#1A8C68;--gl:#E8F5F0;--gm:#4DB892;--tx:#1A1A18;--mu:#6B6B67;--bd:#E2E2DC;--bg:#FAFAF7;--wh:#FFFFFF;--r:14px;--danger:#C94040}
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);display:flex;flex-direction:column}
 
-/* ── TOPBAR ── */
-.topbar{background:var(--wh);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 20px;height:56px;flex-shrink:0;z-index:50}
+/* TOPBAR */
+.topbar{background:var(--wh);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:56px;flex-shrink:0;z-index:50}
 .logo{font-family:'Fraunces',serif;font-size:19px;font-weight:400;text-decoration:none;color:var(--tx)}
 .logo b{color:var(--g);font-weight:400}
 .top-tabs{display:flex;gap:3px;background:var(--bg);border-radius:10px;padding:3px}
-.ttab{padding:5px 14px;border-radius:8px;border:none;background:transparent;font-size:13px;color:var(--mu);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap}
+.ttab{padding:5px 14px;border-radius:8px;border:none;background:transparent;font-size:13px;color:var(--mu);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;white-space:nowrap;position:relative}
 .ttab.on{background:var(--wh);color:var(--tx);font-weight:500;border:1px solid var(--bd)}
+.tab-badge{position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;background:var(--g);font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center}
 .top-right{display:flex;align-items:center;gap:10px}
-.notif-btn{position:relative;background:none;border:none;cursor:pointer;font-size:20px;padding:4px}
-.notif-dot{position:absolute;top:2px;right:2px;width:8px;height:8px;border-radius:50%;background:var(--g);border:2px solid var(--wh)}
 .top-avatar{width:32px;height:32px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;border:2px solid var(--gm)}
 
-/* ── LAYOUT ── */
+/* LAYOUT */
 .body{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative}
 .screen{display:none;flex:1;flex-direction:column;overflow:hidden}
 .screen.on{display:flex}
 
-/* ══════════════════════════════
-   PANTALLA: PERSONAS (swipe)
-══════════════════════════════ */
-.swipe-area{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px 16px 8px;overflow:hidden}
-.deck{position:relative;width:100%;max-width:340px;height:480px}
-.pcard{position:absolute;inset:0;background:var(--wh);border:1px solid var(--bd);border-radius:20px;overflow:hidden;cursor:grab;user-select:none;touch-action:none}
-.pcard:nth-child(1){z-index:3;transform:none}
+/* ── MODO INVITADO BANNER ── */
+.guest-banner{background:var(--tx);color:#fff;text-align:center;padding:9px 16px;font-size:13px;display:flex;align-items:center;justify-content:center;gap:12px;flex-shrink:0}
+.guest-banner a{color:var(--gm);font-weight:500;text-decoration:none}
+.guest-close{background:none;border:none;color:rgba(255,255,255,.5);cursor:pointer;font-size:16px;padding:0 4px}
+
+/* ── FILTROS DE COMPATIBILIDAD (panel lateral o drawer) ── */
+.filters-panel{width:260px;background:var(--wh);border-right:1px solid var(--bd);flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto;padding:16px}
+.fp-title{font-size:13px;font-weight:500;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.fp-reset{font-size:11px;color:var(--g);cursor:pointer;font-weight:400}
+.fp-section{margin-bottom:16px}
+.fp-label{font-size:11px;color:var(--mu);font-weight:500;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.hard-badge{font-size:10px;background:#FEF3E2;color:#8A5A00;padding:1px 6px;border-radius:4px}
+.soft-badge{font-size:10px;background:var(--gl);color:var(--g);padding:1px 6px;border-radius:4px}
+.filter-chips{display:flex;flex-wrap:wrap;gap:5px}
+.fchip{padding:4px 10px;border-radius:14px;border:1px solid var(--bd);background:var(--bg);font-size:12px;cursor:pointer;color:var(--mu);transition:all .12s;font-family:'DM Sans',sans-serif}
+.fchip.on{background:var(--tx);color:#fff;border-color:var(--tx)}
+.fchip.hard-on{background:#FEF3E2;color:#8A5A00;border-color:#EF9F27}
+.weight-mini{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.wm-label{font-size:11px;color:var(--mu);width:64px;flex-shrink:0}
+.wm-slider{flex:1;accent-color:var(--g)}
+.wm-val{font-size:11px;font-weight:500;min-width:28px;text-align:right}
+.min-score-row{display:flex;align-items:center;gap:8px;margin-top:4px}
+.min-score-row input{flex:1;accent-color:var(--g)}
+.min-score-val{font-size:12px;font-weight:500;min-width:36px;text-align:right}
+.btn-apply{width:100%;padding:9px;border-radius:20px;background:var(--g);color:#fff;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;transition:opacity .15s}
+.btn-apply:hover{opacity:.85}
+
+/* ── SWIPE ── */
+.swipe-layout{flex:1;display:flex;overflow:hidden}
+.swipe-main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding:14px 14px 6px;overflow:hidden}
+
+/* PENDING BANNER — perfiles que ya te dieron like */
+.pending-banner{width:100%;max-width:360px;background:var(--wh);border:1px solid var(--gm);border-radius:12px;padding:10px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:border-color .15s}
+.pending-banner:hover{border-color:var(--g)}
+.pb-avatars{display:flex}
+.pb-av{width:28px;height:28px;border-radius:50%;border:2px solid var(--wh);background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:13px;margin-left:-6px}
+.pb-av:first-child{margin-left:0}
+.pb-text{flex:1;font-size:13px}
+.pb-text strong{color:var(--g)}
+.pb-arrow{font-size:14px;color:var(--mu)}
+
+.deck{position:relative;width:100%;max-width:340px;flex:1;min-height:0}
+.pcard{position:absolute;inset:0;background:var(--wh);border:1px solid var(--bd);border-radius:20px;overflow-y:auto;cursor:grab;user-select:none;touch-action:none;transition:none}
+.pcard:nth-child(1){z-index:3}
 .pcard:nth-child(2){z-index:2;transform:scale(.96) translateY(10px);pointer-events:none}
 .pcard:nth-child(3){z-index:1;transform:scale(.92) translateY(20px);pointer-events:none}
-.pcard.fly-l{transform:translateX(-130%) rotate(-20deg)!important;opacity:0;transition:transform .28s ease,opacity .28s}
-.pcard.fly-r{transform:translateX(130%) rotate(20deg)!important;opacity:0;transition:transform .28s ease,opacity .28s}
-.pcard-photo{height:240px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:90px;position:relative;overflow:hidden}
-.pcard-compat{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.93);border-radius:20px;padding:4px 10px;font-size:12px;font-weight:500}
-.compat-high{color:#1A8C68}
-.compat-mid{color:#B07B1A}
-.compat-low{color:#A03030}
-.pcard-overlay-like{position:absolute;top:20px;left:16px;font-size:13px;font-weight:700;color:#1A8C68;border:2.5px solid #1A8C68;padding:3px 10px;border-radius:6px;opacity:0;transform:rotate(-15deg);pointer-events:none}
-.pcard-overlay-pass{position:absolute;top:20px;right:16px;font-size:13px;font-weight:700;color:var(--danger);border:2.5px solid var(--danger);padding:3px 10px;border-radius:6px;opacity:0;transform:rotate(15deg);pointer-events:none}
-.pcard-body{padding:16px 18px}
-.pcard-name{font-family:'Fraunces',serif;font-size:21px;font-weight:400;margin-bottom:2px}
-.pcard-role{font-size:13px;color:var(--mu);margin-bottom:10px}
+.pcard.fly-l{transform:translateX(-130%) rotate(-20deg)!important;opacity:0;transition:transform .27s ease,opacity .27s}
+.pcard.fly-r{transform:translateX(130%) rotate(20deg)!important;opacity:0;transition:transform .27s ease,opacity .27s}
+.pcard-photo{height:210px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:80px;position:relative;overflow:hidden;flex-shrink:0}
+.verified-badge{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.92);border-radius:20px;padding:3px 9px;font-size:11px;font-weight:500;color:#185FA5;display:flex;align-items:center;gap:4px}
+.verified-id{color:#0F6E56}
+.compat-badge{position:absolute;top:10px;right:10px;border-radius:20px;padding:4px 10px;font-size:12px;font-weight:500}
+.compat-h{background:rgba(255,255,255,.92);color:#0F6E56}
+.compat-m{background:rgba(255,255,255,.92);color:#854F0B}
+.compat-l{background:rgba(255,255,255,.92);color:#A03030}
+.pcard-overlay-like{position:absolute;top:22px;left:14px;font-size:13px;font-weight:700;color:#1A8C68;border:2.5px solid #1A8C68;padding:3px 10px;border-radius:6px;opacity:0;transform:rotate(-15deg);pointer-events:none;z-index:10}
+.pcard-overlay-pass{position:absolute;top:22px;right:14px;font-size:13px;font-weight:700;color:var(--danger);border:2.5px solid var(--danger);padding:3px 10px;border-radius:6px;opacity:0;transform:rotate(15deg);pointer-events:none;z-index:10}
+.pcard-body{padding:14px 16px}
+.pcard-name-row{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.pcard-name{font-family:'Fraunces',serif;font-size:20px;font-weight:400}
+.pcard-role{font-size:12px;color:var(--mu);margin-bottom:10px}
 .pcard-chips{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
-.chip{font-size:11px;padding:3px 9px;border-radius:12px;background:var(--gl);color:var(--g)}
-.chip.hard{background:#FEF3E2;color:#8A5A00}
+.chip{font-size:11px;padding:3px 8px;border-radius:10px;background:var(--gl);color:var(--g)}
+.chip.hard-fail{background:#FCEBEB;color:#A03030}
+.chip.neutral{background:var(--bg);color:var(--mu);border:1px solid var(--bd)}
 .pcard-bio{font-size:13px;color:var(--mu);line-height:1.6;margin-bottom:10px}
-.pcard-budget{font-size:14px;font-weight:500}
-.pcard-budget span{font-weight:400;color:var(--mu);font-size:12px}
+.pcard-budget{font-size:13px;font-weight:500;margin-bottom:12px}
+.pcard-budget span{font-weight:400;color:var(--mu)}
 
-/* compat breakdown tooltip */
-.compat-bar{margin-top:8px;display:flex;flex-direction:column;gap:4px}
-.cb-row{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--mu)}
-.cb-track{flex:1;height:4px;background:var(--bd);border-radius:2px;overflow:hidden}
-.cb-fill{height:100%;border-radius:2px;background:var(--g);transition:width .4s}
+/* COMPAT BREAKDOWN */
+.compat-breakdown{border-top:1px solid var(--bd);padding:12px 16px}
+.cb-title{font-size:10px;color:var(--mu);font-weight:500;letter-spacing:.5px;margin-bottom:8px}
+.cb-row{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11px;color:var(--mu)}
+.cb-label{width:72px;flex-shrink:0}
+.cb-track{flex:1;height:3px;background:var(--bd);border-radius:2px;overflow:hidden}
+.cb-fill{height:100%;border-radius:2px;background:var(--g)}
+.cb-fill.hard{background:#EF9F27}
+.cb-fill.zero{background:#F09595}
+.cb-val{min-width:28px;text-align:right;font-size:10px;font-weight:500;color:var(--tx)}
+.blocked-overlay{position:absolute;inset:0;background:rgba(250,250,247,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:14px;color:var(--mu);text-align:center;padding:24px;backdrop-filter:blur(2px)}
+.blocked-overlay strong{color:var(--tx);font-size:15px}
 
-.actions{display:flex;justify-content:center;align-items:center;gap:14px;padding:12px 0}
+/* ACTIONS */
+.actions{display:flex;justify-content:center;align-items:center;gap:14px;padding:10px 0 8px;flex-shrink:0}
 .btn-a{border:1px solid var(--bd);border-radius:50%;background:var(--wh);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;font-size:18px}
 .btn-a:active{transform:scale(.9)}
 .btn-pass{width:52px;height:52px;color:var(--danger);border-color:#F0C0C0}
@@ -76,76 +119,51 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);displ
 .btn-like{width:60px;height:60px;font-size:22px;color:var(--g);border-color:#9FE1CB}
 .btn-like:hover{background:var(--gl)}
 .btn-super{width:46px;height:46px;font-size:16px;color:#3478C8;border-color:#B5D4F4}
-.btn-super:hover{background:#EBF3FD}
 .btn-undo{width:40px;height:40px;font-size:15px;color:var(--mu)}
 
-.empty-deck{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--mu);font-size:15px;text-align:center;padding:20px}
-.empty-deck span{font-size:48px}
+.empty-deck{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;font-size:14px;color:var(--mu);text-align:center;padding:40px 20px;height:100%}
+.empty-deck span{font-size:44px}
 
-/* ══════════════════════════════
-   PANTALLA: PISOS
-══════════════════════════════ */
-.filter-bar{display:flex;gap:8px;padding:10px 14px;overflow-x:auto;flex-shrink:0;scrollbar-width:none;border-bottom:1px solid var(--bd)}
-.filter-bar::-webkit-scrollbar{display:none}
-.fc{padding:5px 13px;border-radius:16px;border:1px solid var(--bd);background:var(--wh);font-size:12px;cursor:pointer;color:var(--mu);white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all .12s}
-.fc.on{background:var(--gl);color:var(--g);border-color:var(--gm)}
-.pisos-list{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px}
-.pisocard{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);display:flex;overflow:hidden;cursor:pointer;transition:border-color .15s}
-.pisocard:hover{border-color:var(--gm)}
-.pisocard-img{width:100px;min-height:88px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:34px;flex-shrink:0}
-.pisocard-data{padding:11px 13px;flex:1;min-width:0}
-.pisocard-tipo{font-size:11px;color:var(--g);font-weight:500;margin-bottom:2px;letter-spacing:.3px}
-.pisocard-name{font-size:14px;font-weight:500;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pisocard-loc{font-size:12px;color:var(--mu);margin-bottom:7px}
-.pisocard-row{display:flex;align-items:center;justify-content:space-between;gap:8px}
-.pisocard-price{font-family:'Fraunces',serif;font-size:16px}
-.pisocard-price small{font-size:11px;font-family:'DM Sans',sans-serif;color:var(--mu)}
-.pisocard-tags{display:flex;gap:4px;flex-wrap:wrap}
-/* Propietario puede escribir libremente → botón directo */
-.btn-contact-piso{background:var(--g);color:#fff;border:none;border-radius:14px;padding:5px 12px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:opacity .15s}
-.btn-contact-piso:hover{opacity:.85}
+/* ── MATCHES / ESTADOS ── */
+.matches-scroll{flex:1;overflow-y:auto;padding:0 14px 14px}
+.msect{font-size:11px;font-weight:500;color:var(--mu);letter-spacing:.8px;padding:16px 0 8px;display:flex;align-items:center;gap:8px}
+.msect-badge{background:var(--g);color:#fff;font-size:10px;padding:1px 7px;border-radius:10px;font-weight:500;letter-spacing:0}
 
-/* ══════════════════════════════
-   PANTALLA: MATCHES
-══════════════════════════════ */
-.matches-wrap{flex:1;overflow-y:auto;padding:0 14px 14px}
-.msect{font-size:11px;font-weight:500;color:var(--mu);letter-spacing:.8px;padding:16px 0 8px}
-.pending-list{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
-.pending-list::-webkit-scrollbar{display:none}
-.pending-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex-shrink:0}
-.pending-av{width:56px;height:56px;border-radius:50%;border:2px solid var(--gm);background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:26px;position:relative}
-.pending-pulse{position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--g);opacity:.4;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{transform:scale(1);opacity:.4}50%{transform:scale(1.08);opacity:.15}}
-.pending-name{font-size:11px;font-weight:500;text-align:center;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pending-label{font-size:10px;color:var(--g)}
+/* ESTADOS SEPARADOS */
+.state-card{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:8px}
+.sc-label{font-size:11px;font-weight:500;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.state-pending{color:#854F0B;background:#FAEEDA;padding:2px 8px;border-radius:10px}
+.state-mutual{color:#0F6E56;background:var(--gl);padding:2px 8px;border-radius:10px}
+.state-sent{color:#185FA5;background:#E6F1FB;padding:2px 8px;border-radius:10px}
+.pending-avatars{display:flex;gap:10px;overflow-x:auto;padding-bottom:6px;scrollbar-width:none}
+.pending-avatars::-webkit-scrollbar{display:none}
+.pav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;flex-shrink:0}
+.pav-circle{width:54px;height:54px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:24px;border:2px solid var(--gm);position:relative}
+.pav-pulse{position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--g);opacity:.35;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:.35}50%{transform:scale(1.08);opacity:.1}}
+.pav-name{font-size:11px;font-weight:500;text-align:center;max-width:58px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pav-compat{font-size:10px;color:var(--g)}
 
-.conv-item{display:flex;align-items:center;gap:11px;padding:11px 8px;border-radius:var(--r);cursor:pointer;transition:background .12s}
+.conv-item{display:flex;align-items:center;gap:11px;padding:10px 8px;border-radius:var(--r);cursor:pointer;transition:background .12s}
 .conv-item:hover{background:var(--bg)}
 .conv-av{width:44px;height:44px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;position:relative}
-.conv-unread{position:absolute;top:-2px;right:-2px;width:15px;height:15px;border-radius:50%;background:var(--g);font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--wh)}
+.conv-unread{position:absolute;top:-2px;right:-2px;width:14px;height:14px;border-radius:50%;background:var(--g);font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--wh)}
 .conv-info{flex:1;min-width:0}
-.conv-name{font-size:14px;font-weight:500}
+.conv-name{font-size:14px;font-weight:500;display:flex;align-items:center;gap:6px}
 .conv-preview{font-size:12px;color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.conv-meta{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0}
-.conv-time{font-size:11px;color:var(--mu)}
-.conv-match-type{font-size:10px;color:var(--g);font-weight:500}
+.conv-meta{flex-shrink:0;text-align:right}
+.conv-time{font-size:11px;color:var(--mu);display:block}
+.conv-type{font-size:10px;color:var(--g);font-weight:500}
 
-/* EMPTY MATCHES */
-.empty-matches{display:flex;flex-direction:column;align-items:center;padding:48px 20px;gap:10px;color:var(--mu);text-align:center}
-.empty-matches span{font-size:44px}
-
-/* ══════════════════════════════
-   PANTALLA: CHAT
-══════════════════════════════ */
-.chat-hdr{display:flex;align-items:center;gap:10px;padding:11px 14px;border-bottom:1px solid var(--bd);flex-shrink:0}
+/* ── CHAT ── */
+.chat-hdr{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--bd);flex-shrink:0}
 .chat-back{background:none;border:none;cursor:pointer;font-size:18px;color:var(--mu);padding:2px 6px 2px 0}
 .chat-hdr-av{width:36px;height:36px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.chat-hdr-info{flex:1}
 .chat-hdr-name{font-size:14px;font-weight:500}
 .chat-hdr-sub{font-size:11px;color:var(--g)}
-.chat-match-badge{font-size:11px;background:var(--gl);color:var(--g);padding:3px 9px;border-radius:12px;font-weight:500}
-.msgs{flex:1;overflow-y:auto;padding:14px 14px;display:flex;flex-direction:column;gap:7px}
-.day-sep{text-align:center;font-size:11px;color:var(--mu);margin:6px 0}
+.chat-type-badge{font-size:10px;background:var(--gl);color:var(--g);padding:3px 8px;border-radius:10px;font-weight:500;flex-shrink:0}
+.msgs{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:7px}
+.day-sep{text-align:center;font-size:11px;color:var(--mu);margin:4px 0}
 .msg{max-width:72%;padding:9px 13px;border-radius:16px;font-size:14px;line-height:1.55;word-break:break-word}
 .msg-them{background:var(--wh);border:1px solid var(--bd);align-self:flex-start;border-bottom-left-radius:4px}
 .msg-me{background:var(--g);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
@@ -155,91 +173,197 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);displ
 .chat-input{display:flex;gap:8px;padding:9px 12px 14px;border-top:1px solid var(--bd);flex-shrink:0}
 .chat-input input{flex:1;border:1px solid var(--bd);border-radius:22px;padding:9px 14px;font-size:14px;background:var(--wh);color:var(--tx);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s}
 .chat-input input:focus{border-color:var(--gm)}
-.btn-send{width:38px;height:38px;border-radius:50%;background:var(--g);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;flex-shrink:0;transition:opacity .15s}
-.btn-send:hover{opacity:.85}
+.btn-send{width:38px;height:38px;border-radius:50%;background:var(--g);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;flex-shrink:0}
 
-/* ══════════════════════════════
-   MATCH POPUP
-══════════════════════════════ */
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center;padding:20px}
+/* ── PISOS ── */
+.filter-bar{display:flex;gap:7px;padding:10px 14px;overflow-x:auto;flex-shrink:0;border-bottom:1px solid var(--bd);scrollbar-width:none}
+.filter-bar::-webkit-scrollbar{display:none}
+.fc{padding:5px 12px;border-radius:14px;border:1px solid var(--bd);background:var(--wh);font-size:12px;cursor:pointer;color:var(--mu);white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all .12s}
+.fc.on{background:var(--gl);color:var(--g);border-color:var(--gm)}
+.pisos-list{flex:1;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:9px}
+.pisocard{background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);display:flex;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.pisocard:hover{border-color:var(--gm)}
+.pisocard-img{width:96px;min-height:84px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}
+.pisocard-data{padding:10px 12px;flex:1;min-width:0}
+.pisocard-tipo{font-size:10px;color:var(--g);font-weight:500;margin-bottom:2px;letter-spacing:.3px}
+.pisocard-name{font-size:14px;font-weight:500;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pisocard-loc{font-size:12px;color:var(--mu);margin-bottom:7px}
+.pisocard-row{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.pisocard-price{font-family:'Fraunces',serif;font-size:16px}
+.pisocard-price small{font-size:11px;font-family:'DM Sans',sans-serif;color:var(--mu)}
+
+/* OVERLAYS */
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:16px}
 .overlay.on{display:flex}
-.match-popup{background:var(--wh);border-radius:20px;padding:28px 24px;text-align:center;max-width:300px;width:100%;animation:pop .3s ease}
-@keyframes pop{from{transform:scale(.8);opacity:0}to{transform:scale(1);opacity:1}}
-.match-popup-icon{font-size:54px;margin-bottom:10px}
-.match-popup-title{font-family:'Fraunces',serif;font-size:26px;color:var(--g);margin-bottom:5px}
-.match-popup-sub{font-size:13px;color:var(--mu);margin-bottom:6px;line-height:1.5}
-.match-compat-big{font-size:28px;font-weight:500;color:var(--g);margin-bottom:14px}
-.btn-popup-chat{background:var(--g);color:#fff;border:none;border-radius:24px;padding:12px 0;font-size:15px;font-weight:500;cursor:pointer;width:100%;margin-bottom:8px;font-family:'DM Sans',sans-serif}
+.popup{background:var(--wh);border-radius:20px;padding:28px 24px;text-align:center;max-width:300px;width:100%;animation:pop .28s ease}
+@keyframes pop{from{transform:scale(.82);opacity:0}to{transform:scale(1);opacity:1}}
+.popup-icon{font-size:50px;margin-bottom:10px}
+.popup-title{font-family:'Fraunces',serif;font-size:24px;color:var(--g);margin-bottom:5px}
+.popup-sub{font-size:13px;color:var(--mu);margin-bottom:8px;line-height:1.5}
+.popup-compat{font-size:26px;font-weight:500;color:var(--g);margin-bottom:16px}
+.btn-popup{background:var(--g);color:#fff;border:none;border-radius:22px;padding:12px 0;font-size:15px;font-weight:500;cursor:pointer;width:100%;margin-bottom:8px;font-family:'DM Sans',sans-serif}
 .btn-popup-skip{background:none;border:none;color:var(--mu);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif}
 
-/* ══════════════════════════════
-   PISO DETAIL POPUP
-══════════════════════════════ */
-.piso-popup{background:var(--wh);border-radius:20px;padding:0;max-width:360px;width:100%;overflow:hidden;animation:pop .25s ease}
-.piso-popup-img{height:160px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:64px}
-.piso-popup-body{padding:20px}
-.piso-popup-tipo{font-size:11px;color:var(--g);font-weight:500;margin-bottom:4px;letter-spacing:.3px}
-.piso-popup-name{font-family:'Fraunces',serif;font-size:20px;margin-bottom:4px}
-.piso-popup-loc{font-size:13px;color:var(--mu);margin-bottom:12px}
-.piso-popup-price{font-family:'Fraunces',serif;font-size:24px;margin-bottom:4px}
-.piso-popup-price small{font-size:13px;font-family:'DM Sans',sans-serif;color:var(--mu)}
-.piso-popup-desc{font-size:13px;color:var(--mu);line-height:1.6;margin-bottom:16px}
-.piso-popup-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
-/* Libre para propietarios: cualquier interesado puede escribir */
-.btn-contact-libre{background:var(--g);color:#fff;border:none;border-radius:24px;padding:13px 0;font-size:15px;font-weight:500;cursor:pointer;width:100%;font-family:'DM Sans',sans-serif;transition:opacity .15s}
-.btn-contact-libre:hover{opacity:.85}
-.contact-note{font-size:12px;color:var(--mu);text-align:center;margin-top:8px}
-.btn-popup-close{background:none;border:none;color:var(--mu);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;display:block;margin:6px auto 0;padding:4px 12px}
+/* PENDING POPUP */
+.pending-popup{background:var(--wh);border-radius:20px;max-width:360px;width:100%;overflow:hidden;animation:pop .28s ease}
+.pending-popup-header{padding:18px 20px 14px;border-bottom:1px solid var(--bd)}
+.pending-popup-title{font-family:'Fraunces',serif;font-size:20px;margin-bottom:4px}
+.pending-popup-sub{font-size:13px;color:var(--mu)}
+.pending-popup-list{max-height:320px;overflow-y:auto}
+.pp-item{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .12s}
+.pp-item:hover{background:var(--bg)}
+.pp-item-av{width:44px;height:44px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.pp-item-info{flex:1}
+.pp-item-name{font-size:14px;font-weight:500}
+.pp-item-sub{font-size:12px;color:var(--mu)}
+.pp-item-compat{font-size:13px;font-weight:500;color:var(--g)}
+.pp-item-btns{display:flex;gap:6px}
+.btn-pp-like{background:var(--g);color:#fff;border:none;border-radius:16px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-pp-pass{background:var(--bg);color:var(--mu);border:1px solid var(--bd);border-radius:16px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.pending-popup-close{display:block;text-align:center;padding:14px;font-size:13px;color:var(--mu);cursor:pointer;border-top:1px solid var(--bd)}
 
-/* ══════════════════════════════
-   BOTTOM NAV (móvil)
-══════════════════════════════ */
+/* GUEST LOCK */
+.guest-lock{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:32px 20px;color:var(--mu);text-align:center;font-size:13px}
+.guest-lock span{font-size:40px}
+.btn-register{background:var(--g);color:#fff;border:none;border-radius:20px;padding:10px 24px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px}
+
+/* BOTTOM NAV */
 .bnav{display:none;background:var(--wh);border-top:1px solid var(--bd);padding:6px 0 calc(6px + env(safe-area-inset-bottom));flex-shrink:0}
 .bnav-inner{display:flex;justify-content:space-around}
 .bnav-btn{display:flex;flex-direction:column;align-items:center;gap:2px;background:none;border:none;cursor:pointer;padding:4px 10px;color:var(--mu);font-size:10px;font-family:'DM Sans',sans-serif;position:relative;min-width:50px}
 .bnav-btn.on{color:var(--g)}
 .bnav-icon{font-size:21px;line-height:1}
-.bnav-badge{position:absolute;top:0;right:10px;width:15px;height:15px;border-radius:50%;background:var(--g);font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center}
+.bnav-badge{position:absolute;top:0;right:10px;width:14px;height:14px;border-radius:50%;background:var(--g);font-size:9px;color:#fff;display:flex;align-items:center;justify-content:center}
 
-/* ══════════════════════════════
-   ALGORITMO: barra de compatibilidad
-══════════════════════════════ */
-.compat-detail{padding:0 18px 14px;border-top:1px solid var(--bd);margin-top:4px}
-.compat-detail-title{font-size:11px;color:var(--mu);margin:10px 0 6px;letter-spacing:.3px}
-.cdr{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:11px;color:var(--mu)}
-.cdr-track{flex:1;height:3px;background:var(--bd);border-radius:2px;overflow:hidden}
-.cdr-fill{height:100%;border-radius:2px;background:var(--g)}
-.cdr-val{min-width:28px;text-align:right;font-size:11px;color:var(--tx)}
-
-/* RESPONSIVE */
 @media(max-width:640px){
   .top-tabs{display:none}
   .bnav{display:block}
-  .deck{max-width:100%;height:calc(100dvh - 56px - 70px - 110px)}
-  .pcard-photo{height:190px;font-size:64px}
+  .filters-panel{display:none}
+  .deck{max-width:100%}
+  .pcard-photo{height:180px;font-size:60px}
 }
-@media(min-width:641px){
-  .swipe-area{flex-direction:row;gap:24px;align-items:flex-start;justify-content:center;padding-top:24px}
-  .deck{flex-shrink:0}
-  .compat-panel{width:260px;background:var(--wh);border:1px solid var(--bd);border-radius:var(--r);padding:16px;flex-shrink:0;margin-top:0;align-self:flex-start}
-  .compat-panel-title{font-size:13px;font-weight:500;margin-bottom:12px}
-}
+
+/* ══════════════════════════════
+   PANEL DE AYUDA
+══════════════════════════════ */
+.help-fab{position:fixed;bottom:88px;right:18px;z-index:500;width:46px;height:46px;border-radius:50%;background:var(--g);color:#fff;border:none;font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(26,140,104,.35);transition:transform .15s;font-family:'DM Sans',sans-serif}
+.help-fab:hover{transform:scale(1.09)}
+.help-panel{position:fixed;inset:0;z-index:600;display:flex;align-items:flex-end;justify-content:flex-end;pointer-events:none}
+.help-panel.open{pointer-events:all}
+.help-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.45);opacity:0;transition:opacity .25s}
+.help-panel.open .help-backdrop{opacity:1}
+.help-drawer{position:relative;z-index:1;width:100%;max-width:420px;height:100dvh;background:var(--wh);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);border-left:1px solid var(--bd)}
+.help-panel.open .help-drawer{transform:translateX(0)}
+.help-hdr{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.help-hdr-logo{font-family:'Fraunces',serif;font-size:17px;font-weight:400}
+.help-close{background:none;border:none;cursor:pointer;font-size:18px;color:var(--mu);padding:4px 6px;border-radius:8px;transition:background .15s}
+.help-close:hover{background:var(--bg)}
+.help-tabs{display:flex;border-bottom:1px solid var(--bd);flex-shrink:0}
+.htab{flex:1;padding:10px;border:none;background:transparent;font-size:12px;color:var(--mu);cursor:pointer;font-family:'DM Sans',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.htab.on{color:var(--g);font-weight:500;border-bottom-color:var(--g)}
+.help-content{flex:1;overflow-y:auto}
+.htab-content{display:none}.htab-content.on{display:block}
+.tour-progress{padding:12px 18px 8px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;position:sticky;top:0;background:var(--wh);z-index:2;flex-shrink:0}
+.tdot{width:22px;height:3px;border-radius:2px;background:var(--bd);transition:all .3s;cursor:pointer}
+.tdot.done{background:var(--gm)}.tdot.current{background:var(--g);width:30px}
+.tour-step-label{font-size:11px;color:var(--mu);margin-left:auto}
+.tour-step{display:none;flex-direction:column}.tour-step.on{display:flex}
+.step-mockup{background:var(--bg);border-bottom:1px solid var(--bd);padding:16px;display:flex;align-items:center;justify-content:center;min-height:220px;position:relative;overflow:hidden}
+.mock-phone{width:190px;background:var(--wh);border:1px solid var(--bd);border-radius:16px;overflow:hidden}
+.mock-topbar{background:var(--wh);border-bottom:1px solid var(--bd);padding:7px 10px;display:flex;align-items:center;justify-content:space-between}
+.mock-logo-t{font-family:'Fraunces',serif;font-size:12px}
+.mock-tabs-t{display:flex;gap:2px;background:var(--bg);border-radius:5px;padding:2px}
+.mock-tab-t{padding:2px 5px;border-radius:3px;font-size:8px;color:var(--mu)}
+.mock-tab-t.on{background:var(--wh);color:var(--tx);font-weight:500}
+.mock-card-t{margin:6px;background:var(--wh);border:1px solid var(--bd);border-radius:8px;overflow:hidden}
+.mock-photo-t{height:75px;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:30px;position:relative}
+.mock-compat-t{position:absolute;top:5px;right:5px;background:rgba(255,255,255,.9);border-radius:8px;padding:2px 5px;font-size:7px;font-weight:500;color:var(--g)}
+.mock-body-t{padding:6px 8px}
+.mock-name-t{font-family:'Fraunces',serif;font-size:11px;margin-bottom:1px}
+.mock-role-t{font-size:8px;color:var(--mu);margin-bottom:4px}
+.mock-chips-t{display:flex;gap:3px}
+.mock-chip-t{font-size:7px;padding:1px 5px;border-radius:5px;background:var(--gl);color:var(--g)}
+.mock-actions-t{display:flex;justify-content:center;gap:8px;padding:6px}
+.mock-btn-t{width:28px;height:28px;border-radius:50%;border:1px solid var(--bd);background:var(--wh);display:flex;align-items:center;justify-content:center;font-size:10px}
+.mock-btn-t.like{border-color:#9FE1CB;color:var(--g)}.mock-btn-t.pass{border-color:#F0C0C0;color:#C94040}
+.mock-filters-t{margin:6px;background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:7px}
+.mft-title{font-size:7px;font-weight:500;color:var(--mu);margin-bottom:5px;letter-spacing:.3px}
+.mft-row{display:flex;align-items:center;gap:4px;margin-bottom:3px}
+.mft-label{font-size:7px;color:var(--mu);width:44px}
+.mft-track{flex:1;height:2px;background:var(--bd);border-radius:1px;overflow:hidden}
+.mft-fill{height:100%;background:var(--g);border-radius:1px}
+.mft-val{font-size:7px;font-weight:500;min-width:22px;text-align:right}
+.mock-match-t{margin:6px;background:var(--wh);border:1px solid var(--gm);border-radius:10px;padding:10px;text-align:center}
+.mmt-icon{font-size:20px;margin-bottom:3px}
+.mmt-title{font-family:'Fraunces',serif;font-size:12px;color:var(--g);margin-bottom:2px}
+.mmt-compat{font-size:11px;font-weight:500;color:var(--g);margin-bottom:3px}
+.mmt-sub{font-size:7px;color:var(--mu);margin-bottom:5px}
+.mmt-btn{background:var(--g);color:#fff;border:none;border-radius:8px;padding:3px 10px;font-size:8px;cursor:default}
+.mock-states-t{margin:6px;display:flex;flex-direction:column;gap:4px}
+.mst-sect{font-size:7px;font-weight:500;color:var(--mu);padding:2px 0 1px;letter-spacing:.3px}
+.mst-item{background:var(--wh);border:1px solid var(--bd);border-radius:7px;padding:5px;display:flex;align-items:center;gap:5px}
+.mst-av{width:24px;height:24px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.mst-info{flex:1;min-width:0}
+.mst-name{font-size:9px;font-weight:500}
+.mst-sub{font-size:7px;color:var(--mu)}
+.mst-badge{font-size:7px;padding:1px 5px;border-radius:5px;white-space:nowrap}
+.mst-pending{background:#FAEEDA;color:#854F0B}
+.mst-mutual{background:var(--gl);color:var(--g)}
+.mst-sent{background:#E6F1FB;color:#185FA5}
+.step-body-t{padding:16px 18px}
+.step-num-t{font-size:10px;color:var(--g);font-weight:500;letter-spacing:.5px;margin-bottom:5px}
+.step-title-t{font-family:'Fraunces',serif;font-size:18px;font-weight:400;margin-bottom:7px;line-height:1.25}
+.step-desc-t{font-size:13px;color:var(--mu);line-height:1.65;margin-bottom:12px}
+.step-tips-t{display:flex;flex-direction:column;gap:6px}
+.tip-row-t{display:flex;align-items:flex-start;gap:7px;font-size:12px}
+.tip-icon-t{font-size:14px;flex-shrink:0;margin-top:1px}
+.tip-txt-t{color:var(--mu);line-height:1.5}
+.tip-txt-t strong{color:var(--tx)}
+.tour-nav-t{display:flex;align-items:center;justify-content:space-between;padding:12px 18px;border-top:1px solid var(--bd);flex-shrink:0;background:var(--wh)}
+.btn-tprev{padding:8px 16px;border-radius:20px;border:1px solid var(--bd);background:transparent;font-size:13px;color:var(--mu);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-tprev:hover{border-color:var(--tx);color:var(--tx)}.btn-tprev:disabled{opacity:.3;cursor:default}
+.btn-tnext{padding:8px 18px;border-radius:20px;background:var(--g);color:#fff;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s}
+.btn-tnext:hover{opacity:.85}
+.btn-tfinish{padding:8px 18px;border-radius:20px;background:var(--tx);color:#fff;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:none}
+.faq-list-t{padding:12px 16px;display:flex;flex-direction:column;gap:5px}
+.faq-item-t{border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;transition:border-color .15s}
+.faq-item-t.open{border-color:var(--gm)}
+.faq-q-t{padding:12px 14px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;user-select:none}
+.faq-q-t:hover{background:var(--bg)}
+.faq-icon-t{font-size:15px;color:var(--mu);transition:transform .2s;flex-shrink:0}
+.faq-item-t.open .faq-icon-t{transform:rotate(45deg);color:var(--g)}
+.faq-a-t{display:none;padding:0 14px 12px;font-size:12px;color:var(--mu);line-height:1.65}
+.faq-item-t.open .faq-a-t{display:block}
+.contact-wrap-t{padding:16px}
+.contact-card-t{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);padding:16px;text-align:center;margin-bottom:10px}
+.cc-icon{font-size:28px;margin-bottom:6px}
+.cc-title{font-size:14px;font-weight:500;margin-bottom:3px}
+.cc-sub{font-size:12px;color:var(--mu);margin-bottom:10px;line-height:1.5}
+.btn-cc{display:inline-block;background:var(--g);color:#fff;padding:8px 18px;border-radius:18px;font-size:12px;font-weight:500;text-decoration:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif}
+@media(max-width:640px){.help-drawer{max-width:100%;border-left:none;border-radius:20px 20px 0 0;height:88dvh}.help-panel{align-items:flex-end}}
+
 </style>
 </head>
 <body>
+
+<!-- BANNER MODO INVITADO (se oculta si está logueado) -->
+<div class="guest-banner" id="guestBanner">
+  <span>👀 Estás en modo invitado — los datos y fotos son parciales</span>
+  <a href="register.html">Crear cuenta gratis →</a>
+  <button class="guest-close" onclick="dismissGuest()">✕</button>
+</div>
 
 <div class="topbar">
   <a href="index.html" class="logo">con<b>vivio</b></a>
   <div class="top-tabs">
     <button class="ttab on" onclick="go('personas',this)">Personas</button>
     <button class="ttab" onclick="go('pisos',this)">Pisos</button>
-    <button class="ttab" onclick="go('matches',this)">
-      Matches <span id="match-count-badge" style="display:inline-block;background:var(--g);color:#fff;border-radius:10px;font-size:10px;padding:1px 6px;margin-left:2px">2</span>
+    <button class="ttab" onclick="go('matches',this)" id="tab-matches">
+      Matches<span class="tab-badge" id="matches-badge">2</span>
     </button>
   </div>
   <div class="top-right">
-    <button class="notif-btn"><span>🔔</span><span class="notif-dot"></span></button>
-    <div class="top-avatar">👤</div>
+    <div class="top-avatar" title="Mi perfil">👤</div>
   </div>
 </div>
 
@@ -247,15 +371,73 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);displ
 
   <!-- ── PERSONAS ── -->
   <div class="screen on" id="sc-personas">
-    <div class="swipe-area">
-      <div class="deck" id="deck"></div>
+    <div class="swipe-layout">
 
-      <!-- Panel lateral en desktop -->
-      <div class="compat-panel" id="compatPanel" style="display:none">
-        <div class="compat-panel-title">Compatibilidad detallada</div>
-        <div id="compatPanelBody"></div>
+      <!-- Panel de filtros (desktop) -->
+      <div class="filters-panel">
+        <div class="fp-title">Filtros <span class="fp-reset" onclick="resetFilters()">Restablecer</span></div>
+
+        <div class="fp-section">
+          <div class="fp-label">FILTROS DUROS <span class="hard-badge">Excluyen perfiles</span></div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:6px">Ciudad: <strong style="color:var(--tx)">Madrid</strong></div>
+          <div style="font-size:12px;color:var(--mu);margin-bottom:8px">Presupuesto máximo: <strong style="color:var(--tx)" id="fp-presup-val">600€</strong></div>
+          <input type="range" min="150" max="1500" step="50" value="600" style="width:100%;accent-color:var(--g);margin-bottom:10px" oninput="fpPresup(this.value)"/>
+          <div class="filter-chips" style="margin-bottom:6px">
+            <div class="fchip" id="fc-nofum" onclick="toggleHard('nofum')">No fumador/a</div>
+            <div class="fchip" id="fc-mascotas" onclick="toggleHard('mascotas')">Sin mascotas</div>
+          </div>
+        </div>
+
+        <div class="fp-section">
+          <div class="fp-label">PESOS <span class="soft-badge">Ordenan resultados</span></div>
+          <div class="weight-mini">
+            <span class="wm-label">Horario</span>
+            <input type="range" class="wm-slider" min="0" max="3" step="1" value="1" oninput="recalcWeights()"/>
+            <span class="wm-val" id="wm-horario">Normal</span>
+          </div>
+          <div class="weight-mini">
+            <span class="wm-label">Limpieza</span>
+            <input type="range" class="wm-slider" min="0" max="3" step="1" value="2" oninput="recalcWeights()"/>
+            <span class="wm-val" id="wm-limpieza">Mucho</span>
+          </div>
+          <div class="weight-mini">
+            <span class="wm-label">Ruido</span>
+            <input type="range" class="wm-slider" min="0" max="3" step="1" value="1" oninput="recalcWeights()"/>
+            <span class="wm-val" id="wm-ruido">Normal</span>
+          </div>
+          <div class="weight-mini">
+            <span class="wm-label">Teletrabajo</span>
+            <input type="range" class="wm-slider" min="0" max="3" step="1" value="0" oninput="recalcWeights()"/>
+            <span class="wm-val" id="wm-teletrabajo">Nada</span>
+          </div>
+        </div>
+
+        <div class="fp-section">
+          <div class="fp-label">SCORE MÍNIMO</div>
+          <div class="min-score-row">
+            <input type="range" min="0" max="90" step="5" value="40" oninput="updMinScore(this.value)"/>
+            <span class="min-score-val" id="min-score-val">40%</span>
+          </div>
+        </div>
+
+        <button class="btn-apply" onclick="applyFilters()">Aplicar filtros</button>
+      </div>
+
+      <div class="swipe-main">
+        <!-- PENDING BANNER -->
+        <div class="pending-banner" id="pendingBanner" onclick="showPendingPopup()">
+          <div class="pb-avatars">
+            <div class="pb-av">🧑‍🎨</div>
+            <div class="pb-av">👩‍⚕️</div>
+          </div>
+          <div class="pb-text"><strong>2 personas</strong> están esperando tu respuesta</div>
+          <div class="pb-arrow">→</div>
+        </div>
+
+        <div class="deck" id="deck"></div>
       </div>
     </div>
+
     <div class="actions">
       <button class="btn-a btn-undo" onclick="undo()" title="Deshacer">↩</button>
       <button class="btn-a btn-pass" onclick="swipe('l')" title="Pasar">✕</button>
@@ -267,18 +449,18 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);displ
   <!-- ── PISOS ── -->
   <div class="screen" id="sc-pisos">
     <div class="filter-bar">
-      <button class="fc on" onclick="filterPisos(this,'all')">Todo</button>
-      <button class="fc" onclick="filterPisos(this,'hab')">Habitación</button>
-      <button class="fc" onclick="filterPisos(this,'piso')">Piso completo</button>
-      <button class="fc" onclick="filterPisos(this,'mascotas')">Mascotas ok</button>
-      <button class="fc" onclick="filterPisos(this,'pareja')">Pareja ok</button>
+      <button class="fc on" onclick="fpiso(this,'all')">Todo</button>
+      <button class="fc" onclick="fpiso(this,'hab')">Habitación</button>
+      <button class="fc" onclick="fpiso(this,'piso')">Piso completo</button>
+      <button class="fc" onclick="fpiso(this,'mascotas')">Mascotas ok</button>
+      <button class="fc" onclick="fpiso(this,'pareja')">Pareja ok</button>
     </div>
     <div class="pisos-list" id="pisosList"></div>
   </div>
 
-  <!-- ── MATCHES ── -->
+  <!-- ── MATCHES (estados separados) ── -->
   <div class="screen" id="sc-matches">
-    <div class="matches-wrap" id="matchesWrap"></div>
+    <div class="matches-scroll" id="matchesWrap"></div>
   </div>
 
   <!-- ── CHAT ── -->
@@ -286,11 +468,11 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);displ
     <div class="chat-hdr">
       <button class="chat-back" onclick="go('matches',null)">←</button>
       <div class="chat-hdr-av" id="chatAv">🧑‍🎨</div>
-      <div class="chat-hdr-info">
+      <div style="flex:1">
         <div class="chat-hdr-name" id="chatName">—</div>
         <div class="chat-hdr-sub" id="chatSub">En línea</div>
       </div>
-      <div class="chat-match-badge" id="chatBadge">Match mutuo</div>
+      <div class="chat-type-badge" id="chatBadge">Match mutuo</div>
     </div>
     <div class="msgs" id="msgsList"></div>
     <div class="chat-input">
@@ -299,391 +481,511 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);displ
     </div>
   </div>
 
-</div><!-- end body -->
+</div>
 
 <!-- BOTTOM NAV -->
 <div class="bnav">
   <div class="bnav-inner">
-    <button class="bnav-btn on" id="bn-personas" onclick="goMobile('personas',this)">
-      <span class="bnav-icon">🔄</span>Personas
-    </button>
-    <button class="bnav-btn" id="bn-pisos" onclick="goMobile('pisos',this)">
-      <span class="bnav-icon">🏠</span>Pisos
-    </button>
-    <button class="bnav-btn" id="bn-matches" onclick="goMobile('matches',this)">
-      <span class="bnav-icon">💬</span>Matches
-      <span class="bnav-badge">2</span>
-    </button>
-    <button class="bnav-btn" id="bn-perfil" onclick="goMobile('perfil',this)">
-      <span class="bnav-icon">👤</span>Perfil
-    </button>
+    <button class="bnav-btn on" id="bn-personas" onclick="goMobile('personas',this)"><span class="bnav-icon">🔄</span>Personas</button>
+    <button class="bnav-btn" id="bn-pisos" onclick="goMobile('pisos',this)"><span class="bnav-icon">🏠</span>Pisos</button>
+    <button class="bnav-btn" id="bn-matches" onclick="goMobile('matches',this)"><span class="bnav-icon">💬</span>Matches<span class="bnav-badge">2</span></button>
+    <button class="bnav-btn" id="bn-perfil" onclick="goMobile('perfil',this)"><span class="bnav-icon">👤</span>Perfil</button>
   </div>
 </div>
 
 <!-- MATCH POPUP -->
 <div class="overlay" id="matchOverlay">
-  <div class="match-popup">
-    <div class="match-popup-icon">🎉</div>
-    <div class="match-popup-title">¡Match!</div>
-    <div class="match-popup-sub" id="popupSub">Os gustáis mutuamente.</div>
-    <div class="match-compat-big" id="popupCompat">91%</div>
-    <button class="btn-popup-chat" onclick="goChat()">Enviar primer mensaje</button>
-    <button class="btn-popup-skip" onclick="closePopup()">Seguir explorando</button>
+  <div class="popup">
+    <div class="popup-icon">🎉</div>
+    <div class="popup-title">¡Match!</div>
+    <div class="popup-sub" id="popupSub">Os habéis dado like mutuamente.</div>
+    <div class="popup-compat" id="popupCompat">—</div>
+    <button class="btn-popup" onclick="goChat()">Enviar primer mensaje</button>
+    <button class="btn-popup-skip" onclick="closeOverlay('matchOverlay')">Seguir explorando</button>
   </div>
 </div>
 
-<!-- PISO DETAIL POPUP -->
-<div class="overlay" id="pisoOverlay">
-  <div class="piso-popup">
-    <div class="piso-popup-img" id="pp-img">🏠</div>
-    <div class="piso-popup-body">
-      <div class="piso-popup-tipo" id="pp-tipo">Habitación</div>
-      <div class="piso-popup-name" id="pp-name">—</div>
-      <div class="piso-popup-loc" id="pp-loc">—</div>
-      <div class="piso-popup-price" id="pp-price">—</div>
-      <div class="piso-popup-desc" id="pp-desc">—</div>
-      <div class="piso-popup-tags" id="pp-tags"></div>
-      <button class="btn-contact-libre" onclick="contactPropietario()">Contactar propietario</button>
-      <div class="contact-note">No necesitas match previo con propietarios</div>
-      <button class="btn-popup-close" onclick="closePisoPopup()">Cerrar</button>
+<!-- PENDING POPUP -->
+<div class="overlay" id="pendingOverlay">
+  <div class="pending-popup">
+    <div class="pending-popup-header">
+      <div class="pending-popup-title">Te han dado like</div>
+      <div class="pending-popup-sub">Decídete antes de seguir explorando</div>
     </div>
+    <div class="pending-popup-list" id="pendingList"></div>
+    <div class="pending-popup-close" onclick="closeOverlay('pendingOverlay')">Cerrar y seguir explorando</div>
   </div>
 </div>
 
 <script>
-/* ══════════════════════════════════════════
-   DATOS DE PRUEBA
-══════════════════════════════════════════ */
-
-// Usuario actual (yo)
+/* ═══════════════════════════════════════
+   PERFIL DEL USUARIO ACTUAL (yo)
+   Ciudad y fumador son filtros duros.
+   Los pesos blandos son ajustables.
+═══════════════════════════════════════ */
 const ME = {
-  ciudad:'Madrid', presupuesto:500, horario:'madrugador',
-  limpieza:4, ruido:2, fumador:false, mascotas:true, teletrabajo:false, visitas:'poco'
+  ciudad:'Madrid', presupuesto:600, horario:'madrugador',
+  limpieza:4, ruido:2, fumador:false, mascotas:true, teletrabajo:false
 };
 
-// Perfiles de otros usuarios
-const PERFILES = [
+// Pesos ajustables por el usuario (0=nada, 1=poco, 2=normal, 3=mucho)
+let userWeights = { horario:1, limpieza:2, ruido:1, teletrabajo:0 };
+
+// Filtros duros activos
+let hardFilters = { nofum:false, mascotas:false };
+let minScore = 40;
+let maxPresup = 600;
+
+/* ═══════════════════════════════════════
+   DATOS SEED — realistas con variedad
+   Incluye perfiles incompatibles para
+   mostrar los filtros duros funcionando
+═══════════════════════════════════════ */
+const ALL_PROFILES = [
   {
     id:1, nombre:'Lucía', edad:26, emoji:'🧑‍🎨', rol:'Diseñadora',
     ciudad:'Madrid', presupuesto:480, horario:'madrugador',
-    limpieza:5, ruido:2, fumador:false, mascotas:true, teletrabajo:false, visitas:'poco',
-    bio:'Busco piso tranquilo cerca del metro. Me gusta el orden y tengo un gato llamado Mochi.',
-    intent:'busca_habitacion'
+    limpieza:5, ruido:2, fumador:false, mascotas:true, teletrabajo:false,
+    bio:'Busco piso tranquilo cerca del metro. Soy muy ordenada y tengo un gato.',
+    verified:'email', intent:'busca_companero'
   },
   {
-    id:2, nombre:'Marcos', edad:29, emoji:'👨‍💻', rol:'Ingeniero',
-    ciudad:'Madrid', presupuesto:600, horario:'nocturno',
-    limpieza:3, ruido:4, fumador:false, mascotas:false, teletrabajo:true, visitas:'moderado',
-    bio:'Trabajo desde casa, busco ambiente tranquilo con buena fibra. Me encanta cocinar.',
-    intent:'busca_companero'
+    id:2, nombre:'Marcos', edad:29, emoji:'👨‍💻', rol:'Ingeniero de software',
+    ciudad:'Madrid', presupuesto:700, horario:'nocturno',
+    limpieza:3, ruido:4, fumador:false, mascotas:false, teletrabajo:true,
+    bio:'WFH toda la semana. Necesito buen internet y ambiente tranquilo de día.',
+    verified:'id', intent:'busca_companero'
   },
   {
-    id:3, nombre:'Sara', edad:24, emoji:'👩‍🎓', rol:'Estudiante',
-    ciudad:'Barcelona', presupuesto:350, horario:'flexible',
-    limpieza:3, ruido:3, fumador:false, mascotas:false, teletrabajo:false, visitas:'moderado',
-    bio:'Erasmus 6 meses. Busco ambiente internacional y gente abierta a conocerse.',
-    intent:'busca_habitacion'
+    id:3, nombre:'Sara', edad:24, emoji:'👩‍🎓', rol:'Estudiante Erasmus',
+    ciudad:'Barcelona', presupuesto:350, horario:'flexible', // ← ciudad distinta: filtro duro
+    limpieza:3, ruido:3, fumador:false, mascotas:false, teletrabajo:false,
+    bio:'Erasmus 6 meses. Busco ambiente internacional.',
+    verified:'email', intent:'busca_habitacion'
   },
   {
     id:4, nombre:'Iván', edad:32, emoji:'👨‍🍳', rol:'Chef',
     ciudad:'Madrid', presupuesto:420, horario:'nocturno',
-    limpieza:2, ruido:3, fumador:true, mascotas:false, teletrabajo:false, visitas:'poco',
-    bio:'Horario nocturno por trabajo. Busco compañeros que respeten el descanso.',
-    intent:'busca_habitacion'
+    limpieza:2, ruido:3, fumador:true, mascotas:false, teletrabajo:false, // ← fumador
+    bio:'Horario nocturno por trabajo. Llego tarde, me levanto tarde.',
+    verified:null, intent:'busca_habitacion'
   },
   {
     id:5, nombre:'Paula', edad:27, emoji:'👩‍⚕️', rol:'Médica residente',
     ciudad:'Madrid', presupuesto:550, horario:'madrugador',
-    limpieza:5, ruido:1, fumador:false, mascotas:false, teletrabajo:false, visitas:'poco',
-    bio:'MIR en el Gregorio Marañón. Poco tiempo en casa, busco piso limpio y silencioso.',
-    intent:'busca_habitacion'
+    limpieza:5, ruido:1, fumador:false, mascotas:false, teletrabajo:false,
+    bio:'MIR en el Gregorio Marañón. Poco tiempo en casa. Necesito silencio para estudiar.',
+    verified:'id', intent:'busca_habitacion'
+  },
+  {
+    id:6, nombre:'Rafa', edad:35, emoji:'🧑‍🎤', rol:'Músico',
+    ciudad:'Madrid', presupuesto:380, horario:'nocturno',
+    limpieza:2, ruido:5, fumador:true, mascotas:true, teletrabajo:false, // ← fumador + ruido alto
+    bio:'Músico, ensayo en casa a veces. Muy sociable, me gustan las cenas.',
+    verified:null, intent:'busca_companero'
+  },
+  {
+    id:7, nombre:'Elena', edad:31, emoji:'👩‍🏫', rol:'Profesora',
+    ciudad:'Madrid', presupuesto:520, horario:'madrugador',
+    limpieza:4, ruido:2, fumador:false, mascotas:false, teletrabajo:false,
+    bio:'Profesora de secundaria. Me levanto pronto, soy muy tranquila entre semana.',
+    verified:'email', intent:'busca_companero'
   },
 ];
 
 const PISOS = [
-  {
-    id:10, emoji:'🏠', tipo:'Habitación', name:'Habitación en Malasaña', loc:'Madrid · Metro Tribunal 3 min',
-    precio:490, desc:'Habitación exterior amueblada en piso de 3 personas. Hay 2 compañeros ya, ambiente tranquilo entre semana.',
-    tags:['2 compañeros','Wi-Fi 600MB','Mascotas ok','Disponible ya'],
-    mascotas:true, pareja:false, filtro:'hab'
-  },
-  {
-    id:11, emoji:'🏢', tipo:'Piso completo', name:'Piso completo en Lavapiés', loc:'Madrid · Centro histórico',
-    precio:1150, desc:'Piso de 2 habitaciones para alquilar entre 2 personas. Ideal para compañeros que ya se conocen o que usen Convivio para encontrarse.',
-    tags:['2 hab.','Amueblado','Terraza','Pareja ok'],
-    mascotas:false, pareja:true, filtro:'piso'
-  },
-  {
-    id:12, emoji:'🛏', tipo:'Habitación', name:'Hab. doble en Ruzafa', loc:'Valencia · Zona estudiantes',
-    precio:320, desc:'Habitación amplia en piso de estudiantes. 3 compañeras actualmente. Muy buen ambiente.',
-    tags:['3 compañeras','Mixto','Mascotas ok','Estudiantes'],
-    mascotas:true, pareja:false, filtro:'hab'
-  },
-  {
-    id:13, emoji:'🌿', tipo:'Habitación', name:'Ático con terraza', loc:'Sevilla · Triana',
-    precio:430, desc:'Habitación en ático con terraza compartida. Ambiente tranquilo, piso muy luminoso. No se fuma dentro.',
-    tags:['3 compañeros','Terraza','Sin tabaco','Soleado'],
-    mascotas:false, pareja:false, filtro:'hab'
-  },
-  {
-    id:14, emoji:'🏙', tipo:'Estudio', name:'Estudio individual', loc:'Madrid · Lavapiés',
-    precio:720, desc:'Estudio reformado para una sola persona. Totalmente equipado.',
-    tags:['Solo','Amueblado','Reformado','Disponible junio'],
-    mascotas:false, pareja:true, filtro:'piso'
-  },
+  {id:10,emoji:'🏠',tipo:'Habitación',name:'Habitación en Malasaña',loc:'Madrid · Metro Tribunal 3 min',precio:490,desc:'Exterior amueblada. 2 compañeros actuales, ambiente tranquilo.',tags:['2 comp.','Wi-Fi 600MB','Mascotas ok'],mascotas:true,pareja:false,filtro:'hab'},
+  {id:11,emoji:'🏢',tipo:'Piso completo',name:'Piso en Lavapiés',loc:'Madrid · Centro histórico',precio:1150,desc:'2 habitaciones para alquilar entre 2 personas.',tags:['2 hab.','Amueblado','Terraza','Pareja ok'],mascotas:false,pareja:true,filtro:'piso'},
+  {id:12,emoji:'🛏',tipo:'Habitación',name:'Hab. doble en Ruzafa',loc:'Valencia · Zona estudiantes',precio:320,desc:'Piso de estudiantes, 3 compañeras. Muy buen ambiente.',tags:['3 comp.','Mascotas ok'],mascotas:true,pareja:false,filtro:'hab'},
+  {id:13,emoji:'🌿',tipo:'Habitación',name:'Ático con terraza',loc:'Madrid · Triana',precio:430,desc:'Habitación en ático soleado. Sin tabaco dentro.',tags:['Terraza','Sin tabaco'],mascotas:false,pareja:false,filtro:'hab'},
+  {id:14,emoji:'🏙',tipo:'Estudio',name:'Estudio reformado',loc:'Madrid · Lavapiés',precio:720,desc:'Solo para una persona. Totalmente equipado.',tags:['Solo','Reformado'],mascotas:false,pareja:true,filtro:'piso'},
 ];
 
-// Historial de chats existentes
 const CHATS = {
   lucia:[
-    {me:false,txt:'¡Hola! Vi tu perfil y creo que encajaríamos bien 😊',t:'12:30'},
-    {me:true,txt:'¡Hola Lucía! Me parece genial, también tengo gato.',t:'12:31'},
-    {me:false,txt:'¿Cómo se llama el tuyo? El mío es Mochi 🐱',t:'12:32'},
-    {me:true,txt:'El mío Bruno. Oye, ¿cuándo puedes ver el piso?',t:'12:33'},
-    {me:false,txt:'¿Te va el jueves por la tarde?',t:'12:35'},
+    {me:false,txt:'¡Hola! Vi tu perfil y creo que encajaríamos 😊',t:'12:30'},
+    {me:true,txt:'¡Hola Lucía! Yo también lo creo, además tienes gato como yo.',t:'12:31'},
+    {me:false,txt:'¿Cuándo puedes ver el piso?',t:'12:35'},
   ],
   paula:[
-    {me:false,txt:'Hola! Somos muy compatibles según la app 😄',t:'Ayer'},
-    {me:true,txt:'¡Sí! Vi que también eres madrugadora, genial.',t:'Ayer'},
+    {me:false,txt:'Hola! Vi que somos muy compatibles según la app 🙂',t:'Ayer'},
+    {me:true,txt:'¡Sí! Ambas madrugadoras y nivel de limpieza alto. Perfecto.',t:'Ayer'},
   ],
 };
 
-/* ══════════════════════════════════════════
-   ALGORITMO DE COMPATIBILIDAD
-   Basado en el análisis de Julius AI
-══════════════════════════════════════════ */
+// Perfiles que ya dieron like (pending de respuesta)
+const PENDING = [ALL_PROFILES[0], ALL_PROFILES[4]]; // Lucía y Paula
 
-function calcCompat(me, otro) {
-  let score = 0;
-  const breakdown = {};
+/* ═══════════════════════════════════════
+   ALGORITMO DE COMPATIBILIDAD v1
+   Filtros duros → pasan o no.
+   Score blando → ordena los que pasan.
+═══════════════════════════════════════ */
+function calcCompat(p) {
+  const bd = {};
+  let hardFail = false;
+  let hardReasons = [];
 
-  // 1. Ciudad — filtro duro (30 pts)
-  if (me.ciudad === otro.ciudad) { score += 30; breakdown.ciudad = 100; }
-  else { breakdown.ciudad = 0; }
+  // FILTROS DUROS (excluyen si fallan)
+  if (ME.ciudad !== p.ciudad) { hardFail = true; hardReasons.push('Ciudad distinta'); bd.ciudad = 0; }
+  else bd.ciudad = 30;
 
-  // 2. Presupuesto — rango ±20% (25 pts)
-  const difP = Math.abs(me.presupuesto - otro.presupuesto);
-  const pctP = Math.max(0, 1 - difP / (me.presupuesto * 0.4));
-  const ptP = Math.round(pctP * 25);
-  score += ptP;
-  breakdown.presupuesto = Math.round(pctP * 100);
+  if (p.presupuesto > maxPresup) { hardFail = true; hardReasons.push('Presupuesto incompatible'); bd.presupuesto = 0; }
+  else { const dif=Math.abs(ME.presupuesto-p.presupuesto); bd.presupuesto=Math.round(Math.max(0,1-dif/(ME.presupuesto*.4))*25); }
 
-  // 3. Horario (15 pts)
-  const ptH = me.horario === otro.horario ? 15 : (me.horario === 'flexible' || otro.horario === 'flexible' ? 8 : 0);
-  score += ptH;
-  breakdown.horario = Math.round((ptH / 15) * 100);
+  if (hardFilters.nofum && p.fumador) { hardFail = true; hardReasons.push('Fuma'); bd.fumador = 0; }
+  else bd.fumador = ME.fumador===p.fumador ? 5 : (hardFilters.nofum ? 0 : 3);
 
-  // 4. Limpieza — diferencia de nivel (15 pts)
-  const difL = Math.abs(me.limpieza - otro.limpieza);
-  const ptL = Math.max(0, 15 - difL * 4);
-  score += ptL;
-  breakdown.limpieza = Math.round((ptL / 15) * 100);
+  if (hardFilters.mascotas && p.mascotas) { hardFail = true; hardReasons.push('Tiene mascota'); bd.mascotas = 0; }
 
-  // 5. Ruido — diferencia de nivel (10 pts)
-  const difR = Math.abs(me.ruido - otro.ruido);
-  const ptR = Math.max(0, 10 - difR * 3);
-  score += ptR;
-  breakdown.ruido = Math.round((ptR / 10) * 100);
+  // PESOS BLANDOS ajustables
+  const totalW = Object.values(userWeights).reduce((a,b)=>a+b,0) || 1;
+  const SOFT_POOL = 40;
 
-  // 6. Fumador — filtro duro (5 pts)
-  if (me.fumador === otro.fumador) { score += 5; breakdown.fumador = 100; }
-  else { breakdown.fumador = 0; }
+  const wH = (userWeights.horario / totalW) * SOFT_POOL;
+  bd.horario = ME.horario===p.horario ? wH : (ME.horario==='flexible'||p.horario==='flexible' ? wH*.5 : 0);
 
-  // Total sobre 100
-  const total = Math.min(100, Math.round(score));
-  return { total, breakdown };
+  const wL = (userWeights.limpieza / totalW) * SOFT_POOL;
+  const difL = Math.abs(ME.limpieza - p.limpieza);
+  bd.limpieza = Math.max(0, wL - difL*(wL/4));
+
+  const wR = (userWeights.ruido / totalW) * SOFT_POOL;
+  const difR = Math.abs(ME.ruido - p.ruido);
+  bd.ruido = Math.max(0, wR - difR*(wR/4));
+
+  const wT = (userWeights.teletrabajo / totalW) * SOFT_POOL;
+  bd.teletrabajo = ME.teletrabajo===p.teletrabajo ? wT : 0;
+
+  const total = Math.min(100, Math.round(
+    bd.ciudad + bd.presupuesto + bd.fumador +
+    bd.horario + bd.limpieza + bd.ruido + bd.teletrabajo
+  ));
+
+  return { total, bd, hardFail, hardReasons };
 }
 
-function compatColor(n) {
-  if (n >= 80) return 'compat-high';
-  if (n >= 55) return 'compat-mid';
-  return 'compat-low';
-}
-
-/* ══════════════════════════════════════════
-   ESTADO GLOBAL
-══════════════════════════════════════════ */
+/* ═══════════════════════════════════════
+   DECK
+═══════════════════════════════════════ */
+let visibleProfiles = [];
 let cardIdx = 0;
 let lastUndo = null;
+let lastMatchProfile = null;
 let currentChatId = 'lucia';
 let activePisoFilter = 'all';
-let activePisoData = null;
-let pendingLikes = []; // perfiles que nos han dado like (simulado)
 
-// Precalcular compatibilidad para todos los perfiles
-const profiles = PERFILES.map(p => ({ ...p, compat: calcCompat(ME, p) }));
+function applyFilters() {
+  // 1. Filtrar por duros
+  // 2. Calcular score con pesos actuales
+  // 3. Filtrar por score mínimo
+  // 4. Ordenar por score desc
+  visibleProfiles = ALL_PROFILES
+    .map(p => ({ ...p, compat: calcCompat(p) }))
+    .filter(p => !p.compat.hardFail || true) // mostramos todos pero marcamos bloqueados
+    .sort((a,b) => b.compat.total - a.compat.total);
+  cardIdx = 0;
+  buildDeck();
+}
 
-// Simular que Lucía y Paula ya nos dieron like (pending)
-pendingLikes = [
-  { ...profiles[0], matchType:'mutuo' }, // Lucía
-  { ...profiles[4], matchType:'mutuo' }, // Paula
-];
-
-/* ══════════════════════════════════════════
-   DECK DE TARJETAS
-══════════════════════════════════════════ */
 function buildDeck() {
   const deck = document.getElementById('deck');
-  const remaining = profiles.slice(cardIdx, cardIdx + 3);
-
-  if (remaining.length === 0) {
-    deck.innerHTML = `<div class="empty-deck"><span>🌱</span><p>Has visto todos los perfiles de hoy.<br>Vuelve mañana para más matches.</p></div>`;
-    updateCompatPanel(null);
+  const show = visibleProfiles.slice(cardIdx, cardIdx+3);
+  if (show.length===0) {
+    deck.innerHTML=`<div class="empty-deck"><span>🌱</span><p>Has visto todos los perfiles disponibles.<br>Vuelve mañana para más matches.</p></div>`;
     return;
   }
-
-  deck.innerHTML = '';
-  [...remaining].reverse().forEach((p, i) => {
-    const isTop = i === remaining.length - 1;
+  deck.innerHTML='';
+  [...show].reverse().forEach((p,i)=>{
+    const isTop = i===show.length-1;
     const div = document.createElement('div');
-    div.className = 'pcard';
-    div.dataset.id = p.id;
+    div.className='pcard';
+    const c = p.compat;
+    const cClass = c.total>=75?'compat-h':c.total>=50?'compat-m':'compat-l';
+    const vbadge = p.verified==='id'
+      ? '<span class="verified-badge verified-id">🛡 Verificado con ID</span>'
+      : p.verified==='email'
+      ? '<span class="verified-badge">✅ Email verificado</span>'
+      : '';
 
-    const compatClass = compatColor(p.compat.total);
-    const bd = p.compat.breakdown;
+    // Chips: verde=bueno, rojo=fallo blando
+    const horarioChip = ME.horario===p.horario
+      ? `<span class="chip">⏰ ${p.horario}</span>`
+      : `<span class="chip neutral">⏰ ${p.horario}</span>`;
+    const fumChip = p.fumador
+      ? `<span class="chip ${hardFilters.nofum?'hard-fail':'neutral'}">🚬 Fuma</span>`
+      : `<span class="chip">🚭 No fuma</span>`;
+    const mascChip = p.mascotas ? `<span class="chip">🐾 Mascota</span>` : '';
+    const twChip = p.teletrabajo ? `<span class="chip">💻 WFH</span>` : '';
+
+    const bd = c.bd;
+    const breakdown = [
+      {l:'Ciudad',v:bd.ciudad||0,max:30,hard:true},
+      {l:'Presupuesto',v:bd.presupuesto||0,max:25,hard:true},
+      {l:'Horario',v:Math.round(bd.horario||0),max:20},
+      {l:'Limpieza',v:Math.round(bd.limpieza||0),max:20},
+      {l:'Ruido',v:Math.round(bd.ruido||0),max:20},
+    ];
 
     div.innerHTML = `
       <div class="pcard-overlay-like">LIKE</div>
       <div class="pcard-overlay-pass">PASS</div>
-      <div class="pcard-photo">${p.emoji}
-        <span class="pcard-compat ${compatClass}">⚡ ${p.compat.total}%</span>
+      <div class="pcard-photo">
+        ${p.emoji}
+        ${vbadge}
+        <span class="compat-badge ${cClass}">⚡ ${c.total}%</span>
       </div>
+      ${c.hardFail ? `<div class="blocked-overlay"><span style="font-size:32px">🚫</span><strong>Incompatible por filtros duros</strong><div style="font-size:13px">${c.hardReasons.join(' · ')}</div><div style="font-size:12px;margin-top:8px">Puedes ajustar tus filtros para verlo</div></div>` : ''}
       <div class="pcard-body">
-        <div class="pcard-name">${p.nombre}, ${p.edad}</div>
-        <div class="pcard-role">${p.rol} · ${p.ciudad}</div>
-        <div class="pcard-chips">
-          ${p.horario==='madrugador'?'<span class="chip">🌅 Madrugador/a</span>':p.horario==='nocturno'?'<span class="chip hard">🌙 Nocturno/a</span>':'<span class="chip">⏰ Flexible</span>'}
-          ${p.fumador?'<span class="chip hard">🚬 Fumador/a</span>':'<span class="chip">🚭 No fumo</span>'}
-          ${p.mascotas?'<span class="chip">🐾 Tiene mascota</span>':''}
-          ${p.teletrabajo?'<span class="chip">💻 Teletrabajo</span>':''}
+        <div class="pcard-name-row">
+          <div class="pcard-name">${p.nombre}, ${p.edad}</div>
         </div>
+        <div class="pcard-role">${p.rol} · ${p.ciudad}</div>
+        <div class="pcard-chips">${horarioChip}${fumChip}${mascChip}${twChip}</div>
         <div class="pcard-bio">${p.bio}</div>
-        <div class="pcard-budget">🏠 Hasta ${p.presupuesto} € <span>/ mes</span></div>
+        <div class="pcard-budget">🏠 Hasta ${p.presupuesto}€ <span>/ mes</span></div>
       </div>
-      <div class="compat-detail">
-        <div class="compat-detail-title">DESGLOSE DE COMPATIBILIDAD</div>
-        <div class="cdr"><span style="width:68px">Ciudad</span><div class="cdr-track"><div class="cdr-fill" style="width:${bd.ciudad}%"></div></div><span class="cdr-val">${bd.ciudad}%</span></div>
-        <div class="cdr"><span style="width:68px">Presupuesto</span><div class="cdr-track"><div class="cdr-fill" style="width:${bd.presupuesto}%"></div></div><span class="cdr-val">${bd.presupuesto}%</span></div>
-        <div class="cdr"><span style="width:68px">Horario</span><div class="cdr-track"><div class="cdr-fill" style="width:${bd.horario}%"></div></div><span class="cdr-val">${bd.horario}%</span></div>
-        <div class="cdr"><span style="width:68px">Limpieza</span><div class="cdr-track"><div class="cdr-fill" style="width:${bd.limpieza}%"></div></div><span class="cdr-val">${bd.limpieza}%</span></div>
-        <div class="cdr"><span style="width:68px">Ruido</span><div class="cdr-track"><div class="cdr-fill" style="width:${bd.ruido}%"></div></div><span class="cdr-val">${bd.ruido}%</span></div>
+      <div class="compat-breakdown">
+        <div class="cb-title">DESGLOSE · COMPATIBILIDAD</div>
+        ${breakdown.map(b=>{
+          const pct=Math.min(100,Math.round((b.v/b.max)*100));
+          const fillClass=b.hard?'hard':pct<30?'zero':'';
+          return `<div class="cb-row">
+            <span class="cb-label">${b.l}</span>
+            <div class="cb-track"><div class="cb-fill ${fillClass}" style="width:${pct}%"></div></div>
+            <span class="cb-val">${Math.round(b.v)}pt</span>
+          </div>`;
+        }).join('')}
       </div>`;
 
     deck.appendChild(div);
-
-    if (isTop) {
-      setupDrag(div);
-      updateCompatPanel(p);
-    }
+    if(isTop) setupDrag(div);
   });
 }
 
 function setupDrag(card) {
-  let sx = 0, dx = 0, dragging = false;
-  const likeEl = card.querySelector('.pcard-overlay-like');
-  const passEl = card.querySelector('.pcard-overlay-pass');
-
-  const start = e => { sx = (e.touches ? e.touches[0].clientX : e.clientX); dragging = true; card.style.transition = 'none'; };
-  const move = e => {
-    if (!dragging) return;
-    dx = (e.touches ? e.touches[0].clientX : e.clientX) - sx;
-    card.style.transform = `translateX(${dx}px) rotate(${dx * .035}deg)`;
-    likeEl.style.opacity = Math.max(0, Math.min(1, dx / 70));
-    passEl.style.opacity = Math.max(0, Math.min(1, -dx / 70));
+  let sx=0,dx=0,dragging=false;
+  const like=card.querySelector('.pcard-overlay-like');
+  const pass=card.querySelector('.pcard-overlay-pass');
+  const start=e=>{sx=(e.touches?e.touches[0].clientX:e.clientX);dragging=true;card.style.transition='none'};
+  const move=e=>{
+    if(!dragging)return;
+    dx=(e.touches?e.touches[0].clientX:e.clientX)-sx;
+    card.style.transform=`translateX(${dx}px) rotate(${dx*.035}deg)`;
+    like.style.opacity=Math.max(0,Math.min(1,dx/70));
+    pass.style.opacity=Math.max(0,Math.min(1,-dx/70));
   };
-  const end = () => {
-    if (!dragging) return;
-    dragging = false;
-    card.style.transition = '';
-    likeEl.style.opacity = 0; passEl.style.opacity = 0;
-    card.style.transform = '';
-    if (dx > 80) swipe('r');
-    else if (dx < -80) swipe('l');
-    dx = 0;
+  const end=()=>{
+    if(!dragging)return;
+    dragging=false;card.style.transition='';
+    like.style.opacity=0;pass.style.opacity=0;
+    card.style.transform='';
+    if(dx>80)swipe('r');
+    else if(dx<-80)swipe('l');
+    dx=0;
   };
-  card.addEventListener('mousedown', start);
-  card.addEventListener('touchstart', start, { passive: true });
-  window.addEventListener('mousemove', move);
-  window.addEventListener('touchmove', move, { passive: true });
-  window.addEventListener('mouseup', end);
-  window.addEventListener('touchend', end);
+  card.addEventListener('mousedown',start);card.addEventListener('touchstart',start,{passive:true});
+  window.addEventListener('mousemove',move);window.addEventListener('touchmove',move,{passive:true});
+  window.addEventListener('mouseup',end);window.addEventListener('touchend',end);
 }
 
 function swipe(dir) {
-  const top = document.querySelector('.pcard:first-child') || document.querySelector('.pcard');
-  if (!top || top.classList.contains('fly-l') || top.classList.contains('fly-r')) return;
-  const p = profiles[cardIdx];
-  if (!p) return;
-
-  lastUndo = cardIdx;
-  top.classList.add(dir === 'r' || dir === 's' ? 'fly-r' : 'fly-l');
-
-  const liked = dir === 'r' || dir === 's';
-  setTimeout(() => {
-    cardIdx++;
-    buildDeck();
-    // Match mutuo: sólo si ese perfil también nos "gustó" (simulado para Lucía y Paula)
-    if (liked && pendingLikes.find(pl => pl.id === p.id)) {
-      showMatchPopup(p);
+  const top = document.querySelector('.pcard');
+  if(!top||top.classList.contains('fly-l')||top.classList.contains('fly-r'))return;
+  const p = visibleProfiles[cardIdx];
+  if(!p)return;
+  lastUndo=cardIdx;
+  top.classList.add(dir==='r'||dir==='s'?'fly-r':'fly-l');
+  const liked=dir==='r'||dir==='s';
+  setTimeout(()=>{
+    cardIdx++;buildDeck();
+    // Match mutuo: solo si ese perfil está en PENDING (ya nos dio like)
+    if(liked && PENDING.find(x=>x.id===p.id) && !p.compat.hardFail){
+      lastMatchProfile=p;
+      document.getElementById('popupSub').textContent=`Tú y ${p.nombre} os habéis dado like mutuamente.`;
+      document.getElementById('popupCompat').textContent=p.compat.total+'% compatibles';
+      document.getElementById('matchOverlay').classList.add('on');
     }
-  }, 300);
+  },290);
+}
+function undo(){if(lastUndo!==null&&lastUndo<cardIdx){cardIdx=lastUndo;lastUndo=null;buildDeck();}}
+
+/* ═══════════════════════════════════════
+   FILTROS
+═══════════════════════════════════════ */
+const wLabels=['Nada','Poco','Normal','Mucho'];
+function recalcWeights(){
+  document.querySelectorAll('.wm-slider').forEach(sl=>{
+    const f=sl.dataset.factor||sl.previousElementSibling?.textContent.toLowerCase().trim();
+    const labels=document.querySelectorAll('.wm-val');
+    // update label next to slider
+    const val=parseInt(sl.value);
+    const next=sl.nextElementSibling;
+    if(next)next.textContent=wLabels[val];
+  });
+  // update from named sliders
+  document.querySelectorAll('.wm-slider').forEach((sl,i)=>{
+    const keys=['horario','limpieza','ruido','teletrabajo'];
+    if(keys[i]){
+      userWeights[keys[i]]=parseInt(sl.value);
+      const vEl=document.getElementById('wm-'+keys[i]);
+      if(vEl)vEl.textContent=wLabels[parseInt(sl.value)];
+    }
+  });
 }
 
-function undo() {
-  if (lastUndo === null || lastUndo >= cardIdx) return;
-  cardIdx = lastUndo;
-  lastUndo = null;
-  buildDeck();
+function toggleHard(key){
+  hardFilters[key]=!hardFilters[key];
+  document.getElementById('fc-'+key).classList.toggle('hard-on',hardFilters[key]);
+  document.getElementById('fc-'+key).classList.toggle('on',false);
+}
+function fpPresup(v){maxPresup=parseInt(v);document.getElementById('fp-presup-val').textContent=v+'€';}
+function updMinScore(v){minScore=parseInt(v);document.getElementById('min-score-val').textContent=v+'%';}
+function resetFilters(){hardFilters={nofum:false,mascotas:false};minScore=40;maxPresup=600;userWeights={horario:1,limpieza:2,ruido:1,teletrabajo:0};applyFilters();}
+
+/* ═══════════════════════════════════════
+   PENDING POPUP
+═══════════════════════════════════════ */
+function showPendingPopup(){
+  const list=document.getElementById('pendingList');
+  list.innerHTML=PENDING.map(p=>{
+    const c=calcCompat(p);
+    return `<div class="pp-item">
+      <div class="pp-item-av">${p.emoji}</div>
+      <div class="pp-item-info">
+        <div class="pp-item-name">${p.nombre}, ${p.edad} · ${p.rol}</div>
+        <div class="pp-item-sub">${p.ciudad} · Hasta ${p.presupuesto}€</div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px">
+        <div class="pp-item-compat">⚡ ${c.total}%</div>
+        <div class="pp-item-btns">
+          <button class="btn-pp-like" onclick="acceptPending(${p.id})">♥ Like</button>
+          <button class="btn-pp-pass" onclick="passPending(${p.id})">✕</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('pendingOverlay').classList.add('on');
 }
 
-function updateCompatPanel(p) {
-  const panel = document.getElementById('compatPanel');
-  const body = document.getElementById('compatPanelBody');
-  if (!p) { panel.style.display = 'none'; return; }
-  if (window.innerWidth > 640) panel.style.display = 'block';
-  const bd = p.compat.breakdown;
-  body.innerHTML = `
-    <div style="font-family:'Fraunces',serif;font-size:32px;color:var(--g);margin-bottom:4px">${p.compat.total}%</div>
-    <div style="font-size:12px;color:var(--mu);margin-bottom:14px">compatibilidad con ${p.nombre}</div>
-    ${Object.entries({Ciudad:bd.ciudad,Presupuesto:bd.presupuesto,Horario:bd.horario,Limpieza:bd.limpieza,Ruido:bd.ruido}).map(([k,v])=>`
-      <div class="cdr" style="margin-bottom:7px"><span style="width:72px;font-size:12px">${k}</span>
-      <div class="cdr-track"><div class="cdr-fill" style="width:${v}%"></div></div>
-      <span class="cdr-val">${v}%</span></div>`).join('')}
-    <div style="margin-top:14px;font-size:12px;color:var(--mu);line-height:1.5">Ciudad y fumador/a son filtros duros. El resto pondera hábitos de convivencia.</div>`;
-}
-
-/* ══════════════════════════════════════════
-   MATCH POPUP (mutuo entre personas)
-══════════════════════════════════════════ */
-let lastMatchProfile = null;
-function showMatchPopup(p) {
-  lastMatchProfile = p;
-  document.getElementById('popupSub').textContent = `Tú y ${p.nombre} os habéis dado like mutuamente.`;
-  document.getElementById('popupCompat').textContent = p.compat.total + '% compatibles';
+function acceptPending(id){
+  const p=PENDING.find(x=>x.id===id);
+  if(!p)return;
+  closeOverlay('pendingOverlay');
+  lastMatchProfile=p;
+  const c=calcCompat(p);
+  document.getElementById('popupSub').textContent=`Tú y ${p.nombre} os habéis dado like mutuamente.`;
+  document.getElementById('popupCompat').textContent=c.total+'% compatibles';
   document.getElementById('matchOverlay').classList.add('on');
 }
-function closePopup() { document.getElementById('matchOverlay').classList.remove('on'); }
-function goChat() {
-  closePopup();
-  if (lastMatchProfile) {
-    currentChatId = lastMatchProfile.nombre.toLowerCase();
-    openChat(lastMatchProfile.nombre.toLowerCase(), lastMatchProfile.emoji, lastMatchProfile.nombre, 'Match mutuo · ' + lastMatchProfile.compat.total + '% compat.');
+function passPending(id){
+  const idx=PENDING.findIndex(x=>x.id===id);
+  if(idx>=0)PENDING.splice(idx,1);
+  showPendingPopup();
+  if(PENDING.length===0){closeOverlay('pendingOverlay');document.getElementById('pendingBanner').style.display='none';}
+}
+
+/* ═══════════════════════════════════════
+   MATCHES — ESTADOS SEPARADOS
+═══════════════════════════════════════ */
+function renderMatches(){
+  const wrap=document.getElementById('matchesWrap');
+
+  // Estado 1: Pending (te dieron like, espera tu respuesta)
+  const pendingHTML=PENDING.length?`
+    <div class="msect">ESPERANDO TU RESPUESTA <span class="msect-badge">${PENDING.length}</span></div>
+    <div class="state-card">
+      <div class="sc-label"><span class="state-pending">⏳ Pendiente</span> Estas personas te dieron like. Decide antes de seguir.</div>
+      <div class="pending-avatars">
+        ${PENDING.map(p=>{const c=calcCompat(p);return`<div class="pav-item" onclick="showPendingPopup()">
+          <div class="pav-circle">${p.emoji}<span class="pav-pulse"></span></div>
+          <div class="pav-name">${p.nombre}</div>
+          <div class="pav-compat">⚡${c.total}%</div>
+        </div>`}).join('')}
+      </div>
+    </div>`:'' ;
+
+  // Estado 2: Matches mutuos (chat abierto)
+  const mutualHTML=`
+    <div class="msect">MATCHES MUTUOS <span class="msect-badge">2</span></div>
+    <div class="state-card">
+      <div class="sc-label"><span class="state-mutual">✅ Match mutuo</span> Chat habilitado</div>
+      ${[
+        {key:'lucia',emoji:'🧑‍🎨',name:'Lucía',preview:'¿Cuándo puedes ver el piso?',time:'12:35',unread:1,compat:91},
+        {key:'paula',emoji:'👩‍⚕️',name:'Paula',preview:'¡Sí! Ambas madrugadoras...',time:'Ayer',unread:0,compat:88},
+      ].map(c=>`
+        <div class="conv-item" onclick="openChat('${c.key}','${c.emoji}','${c.name}','Match mutuo · ${c.compat}% compat.')">
+          <div class="conv-av">${c.emoji}${c.unread?`<span class="conv-unread">${c.unread}</span>`:''}</div>
+          <div class="conv-info">
+            <div class="conv-name">${c.name} <span style="font-size:11px;color:var(--g);font-weight:400">⚡${c.compat}%</span></div>
+            <div class="conv-preview">${c.preview}</div>
+          </div>
+          <div class="conv-meta"><span class="conv-time">${c.time}</span><span class="conv-type">Match mutuo</span></div>
+        </div>`).join('')}
+    </div>`;
+
+  // Estado 3: Likes enviados (esperando que el otro responda)
+  const sentHTML=`
+    <div class="msect">LIKES ENVIADOS</div>
+    <div class="state-card">
+      <div class="sc-label"><span class="state-sent">📤 Enviado</span> Esperando respuesta</div>
+      <div class="conv-item">
+        <div class="conv-av">👨‍💻</div>
+        <div class="conv-info">
+          <div class="conv-name">Marcos</div>
+          <div class="conv-preview" style="color:var(--g)">Le diste like · Esperando su respuesta...</div>
+        </div>
+        <div class="conv-meta"><span class="conv-time">Hoy</span><span class="conv-type">Pendiente</span></div>
+      </div>
+    </div>`;
+
+  wrap.innerHTML=pendingHTML+mutualHTML+sentHTML;
+}
+
+/* ═══════════════════════════════════════
+   CHAT
+═══════════════════════════════════════ */
+function openChat(key,emoji,name,badge){
+  currentChatId=key;
+  document.getElementById('chatAv').textContent=emoji;
+  document.getElementById('chatName').textContent=name;
+  document.getElementById('chatBadge').textContent=badge||'Match mutuo';
+  go('chat',null);renderMsgs();
+}
+function renderMsgs(){
+  const msgs=CHATS[currentChatId]||[];
+  const el=document.getElementById('msgsList');
+  el.innerHTML=`<div class="day-sep">Hoy</div>`+
+    msgs.map(m=>`<div class="msg ${m.me?'msg-me':'msg-them'}">${m.txt}<div class="msg-time">${m.t}</div></div>`).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function sendMsg(){
+  const inp=document.getElementById('msgIn');
+  const txt=inp.value.trim();if(!txt)return;
+  if(!CHATS[currentChatId])CHATS[currentChatId]=[];
+  const now=new Date(),t=`${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
+  CHATS[currentChatId].push({me:true,txt,t});inp.value='';renderMsgs();
+  setTimeout(()=>{
+    const r=['¡Perfecto! Te escribo mañana 😊','¿Tienes WhatsApp?','Ok! ¿Quedamos esta semana?','Entendido 👍'];
+    CHATS[currentChatId].push({me:false,txt:r[Math.floor(Math.random()*r.length)],t});renderMsgs();
+  },900);
+}
+function goChat(){
+  closeOverlay('matchOverlay');
+  if(lastMatchProfile){
+    const key=lastMatchProfile.nombre.toLowerCase();
+    if(!CHATS[key])CHATS[key]=[{me:false,txt:`¡Hola! Tenemos ${lastMatchProfile.compat?.total||'—'}% de compatibilidad 😊`,t:'Ahora'}];
+    openChat(key,lastMatchProfile.emoji,lastMatchProfile.nombre,'Match mutuo');
   }
 }
 
-/* ══════════════════════════════════════════
+/* ═══════════════════════════════════════
    PISOS
-══════════════════════════════════════════ */
-function renderPisos() {
-  const list = document.getElementById('pisosList');
-  const data = PISOS.filter(p => {
-    if (activePisoFilter === 'all') return true;
-    if (activePisoFilter === 'mascotas') return p.mascotas;
-    if (activePisoFilter === 'pareja') return p.pareja;
-    return p.filtro === activePisoFilter;
-  });
-  list.innerHTML = data.map(p => `
-    <div class="pisocard" onclick="openPisoDetail(${p.id})">
+═══════════════════════════════════════ */
+function renderPisos(){
+  const f=activePisoFilter;
+  const data=PISOS.filter(p=>f==='all'||(f==='mascotas'?p.mascotas:f==='pareja'?p.pareja:p.filtro===f));
+  document.getElementById('pisosList').innerHTML=data.map(p=>`
+    <div class="pisocard">
       <div class="pisocard-img">${p.emoji}</div>
       <div class="pisocard-data">
         <div class="pisocard-tipo">${p.tipo.toUpperCase()}</div>
@@ -691,158 +993,307 @@ function renderPisos() {
         <div class="pisocard-loc">📍 ${p.loc}</div>
         <div class="pisocard-row">
           <div class="pisocard-price">${p.precio}€ <small>/mes</small></div>
-          <div class="pisocard-tags">${p.tags.slice(0,2).map(t=>`<span class="chip">${t}</span>`).join('')}</div>
+          <div style="display:flex;gap:4px;flex-wrap:wrap">${p.tags.slice(0,2).map(t=>`<span class="chip">${t}</span>`).join('')}</div>
         </div>
       </div>
     </div>`).join('');
 }
-
-function filterPisos(el, f) {
-  document.querySelectorAll('.fc').forEach(c => c.classList.remove('on'));
-  el.classList.add('on');
-  activePisoFilter = f;
-  renderPisos();
+function fpiso(el,f){
+  document.querySelectorAll('.fc').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');activePisoFilter=f;renderPisos();
 }
 
-function openPisoDetail(id) {
-  const p = PISOS.find(x => x.id === id);
-  if (!p) return;
-  activePisoData = p;
-  document.getElementById('pp-img').textContent = p.emoji;
-  document.getElementById('pp-tipo').textContent = p.tipo;
-  document.getElementById('pp-name').textContent = p.name;
-  document.getElementById('pp-loc').textContent = '📍 ' + p.loc;
-  document.getElementById('pp-price').innerHTML = `${p.precio}€ <small>/mes</small>`;
-  document.getElementById('pp-desc').textContent = p.desc;
-  document.getElementById('pp-tags').innerHTML = p.tags.map(t=>`<span class="chip">${t}</span>`).join('');
-  document.getElementById('pisoOverlay').classList.add('on');
-}
-function closePisoPopup() { document.getElementById('pisoOverlay').classList.remove('on'); }
-// Propietarios: chat libre (sin match mutuo previo)
-function contactPropietario() {
-  closePisoPopup();
-  if (!activePisoData) return;
-  const chatKey = 'propietario_' + activePisoData.id;
-  if (!CHATS[chatKey]) {
-    CHATS[chatKey] = [
-      { me: false, txt: `Hola, soy el propietario de "${activePisoData.name}". ¿En qué puedo ayudarte?`, t: 'Ahora' }
-    ];
-  }
-  openChat(chatKey, activePisoData.emoji, 'Propietario · ' + activePisoData.name, 'Contacto libre · sin match previo');
-}
-
-/* ══════════════════════════════════════════
-   MATCHES
-══════════════════════════════════════════ */
-function renderMatches() {
-  const wrap = document.getElementById('matchesWrap');
-
-  const pendingHTML = pendingLikes.length > 0 ? `
-    <div class="msect">ESPERANDO TU RESPUESTA</div>
-    <div class="pending-list">
-      ${pendingLikes.map(p=>`
-        <div class="pending-item" onclick="focusProfile(${p.id})">
-          <div class="pending-av">${p.emoji}<span class="pending-pulse"></span></div>
-          <div class="pending-name">${p.nombre}</div>
-          <div class="pending-label">${p.compat.total}% compat.</div>
-        </div>`).join('')}
-    </div>` : '';
-
-  const convs = [
-    { key:'lucia', emoji:'🧑‍🎨', name:'Lucía', preview:'¿Te va el jueves por la tarde?', time:'12:35', unread:1, type:'Match mutuo' },
-    { key:'paula', emoji:'👩‍⚕️', name:'Paula', preview:'¡Sí! Vi que también eres madrugadora', time:'Ayer', unread:0, type:'Match mutuo' },
-  ];
-
-  const convsHTML = convs.length ? `
-    <div class="msect">CONVERSACIONES</div>
-    <div class="conv-list">
-      ${convs.map(c=>`
-        <div class="conv-item" onclick="openChat('${c.key}','${c.emoji}','${c.name}','${c.type}')">
-          <div class="conv-av">${c.emoji}${c.unread?`<span class="conv-unread">${c.unread}</span>`:''}</div>
-          <div class="conv-info">
-            <div class="conv-name">${c.name}</div>
-            <div class="conv-preview">${c.preview}</div>
-          </div>
-          <div class="conv-meta">
-            <span class="conv-time">${c.time}</span>
-            <span class="conv-match-type">${c.type}</span>
-          </div>
-        </div>`).join('')}
-    </div>` : '';
-
-  wrap.innerHTML = pendingHTML + convsHTML || `
-    <div class="empty-matches"><span>💬</span><p>Aún no tienes matches.<br>Sigue explorando perfiles.</p></div>`;
-}
-
-/* ══════════════════════════════════════════
-   CHAT
-══════════════════════════════════════════ */
-function openChat(key, emoji, name, badge) {
-  currentChatId = key;
-  document.getElementById('chatAv').textContent = emoji;
-  document.getElementById('chatName').textContent = name;
-  document.getElementById('chatBadge').textContent = badge || 'Match mutuo';
-  go('chat', null);
-  renderMsgs();
-}
-
-function renderMsgs() {
-  const msgs = CHATS[currentChatId] || [];
-  const el = document.getElementById('msgsList');
-  el.innerHTML = `<div class="day-sep">Hoy</div>` +
-    msgs.map(m => `
-      <div class="msg ${m.me ? 'msg-me' : 'msg-them'}">
-        ${m.txt}
-        <div class="msg-time">${m.t}</div>
-      </div>`).join('');
-  el.scrollTop = el.scrollHeight;
-}
-
-function sendMsg() {
-  const inp = document.getElementById('msgIn');
-  const txt = inp.value.trim(); if (!txt) return;
-  if (!CHATS[currentChatId]) CHATS[currentChatId] = [];
-  const now = new Date();
-  const t = `${now.getHours()}:${String(now.getMinutes()).padStart(2,'0')}`;
-  CHATS[currentChatId].push({ me: true, txt, t });
-  inp.value = '';
-  renderMsgs();
-  setTimeout(() => {
-    const replies = ['Perfecto, te aviso 😊', '¡Genial! ¿Tienes alguna pregunta sobre el piso?', 'Ok, hablamos entonces 👍', '¿Cuándo quedarías para verlo?'];
-    CHATS[currentChatId].push({ me: false, txt: replies[Math.floor(Math.random() * replies.length)], t });
-    renderMsgs();
-  }, 900);
-}
-
-/* ══════════════════════════════════════════
+/* ═══════════════════════════════════════
    NAVEGACIÓN
-══════════════════════════════════════════ */
-function go(id, tabEl) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('on'));
-  const sc = document.getElementById('sc-' + id);
-  if (sc) sc.classList.add('on');
-  document.querySelectorAll('.ttab').forEach(t => t.classList.remove('on'));
-  if (tabEl) tabEl.classList.add('on');
-  if (id === 'pisos') renderPisos();
-  if (id === 'matches') renderMatches();
-  if (id === 'chat') renderMsgs();
+═══════════════════════════════════════ */
+function go(id,tabEl){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
+  const sc=document.getElementById('sc-'+id);
+  if(sc)sc.classList.add('on');
+  document.querySelectorAll('.ttab').forEach(t=>t.classList.remove('on'));
+  if(tabEl)tabEl.classList.add('on');
+  if(id==='pisos')renderPisos();
+  if(id==='matches')renderMatches();
+  if(id==='chat')renderMsgs();
 }
-
-function goMobile(id, btn) {
-  go(id, null);
-  document.querySelectorAll('.bnav-btn').forEach(b => b.classList.remove('on'));
-  if (btn) btn.classList.add('on');
+function goMobile(id,btn){
+  go(id,null);
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
 }
-
-function focusProfile(id) {
-  // Lleva al deck y muestra ese perfil
-  const idx = profiles.findIndex(p => p.id === id);
-  if (idx >= 0) { cardIdx = idx; buildDeck(); go('personas', document.querySelector('.ttab')); }
-}
+function closeOverlay(id){document.getElementById(id).classList.remove('on');}
+function dismissGuest(){document.getElementById('guestBanner').style.display='none';}
 
 /* INIT */
-buildDeck();
-window.addEventListener('resize', () => updateCompatPanel(profiles[cardIdx]));
+applyFilters();
 </script>
+
+<!-- BOTÓN AYUDA -->
+<button class="help-fab" onclick="openHelp()" aria-label="Ayuda" title="Ayuda y tour">?</button>
+
+<!-- PANEL AYUDA -->
+<div class="help-panel" id="helpPanel">
+  <div class="help-backdrop" onclick="closeHelp()"></div>
+  <div class="help-drawer">
+    <div class="help-hdr">
+      <div class="help-hdr-logo">con<b style="color:var(--g);font-weight:400">vivio</b> · Ayuda</div>
+      <button class="help-close" onclick="closeHelp()">✕</button>
+    </div>
+    <div class="help-tabs">
+      <button class="htab on" onclick="switchHTab(this,'tour')">🎯 Tour</button>
+      <button class="htab" onclick="switchHTab(this,'faq')">❓ FAQ</button>
+      <button class="htab" onclick="switchHTab(this,'contacto')">✉️ Contacto</button>
+    </div>
+    <div class="help-content">
+
+      <!-- TOUR -->
+      <div class="htab-content on" id="hc-tour">
+        <div class="tour-progress">
+          <div class="tour-steps-dots" id="tourDots"></div>
+          <span class="tour-step-label" id="tourLabel">1 de 6</span>
+        </div>
+        <!-- Step 0 -->
+        <div class="tour-step on" id="tstep-0">
+          <div class="step-mockup">
+            <div class="mock-phone">
+              <div class="mock-topbar"><div class="mock-logo-t">con<b style="color:var(--g);font-weight:400">vivio</b></div>
+                <div class="mock-tabs-t"><div class="mock-tab-t on">Personas</div><div class="mock-tab-t">Pisos</div><div class="mock-tab-t">Matches</div></div>
+              </div>
+              <div style="padding:6px">
+                <div style="background:var(--wh);border:1px solid var(--gm);border-radius:7px;padding:5px 7px;margin-bottom:5px;font-size:8px;display:flex;align-items:center;gap:5px">
+                  <span style="font-size:12px">🧑‍🎨👩‍⚕️</span><div><strong style="color:var(--g)">2 personas</strong> esperan tu respuesta</div>
+                </div>
+                <div class="mock-card-t"><div class="mock-photo-t">🧑‍🎨<span class="mock-compat-t">⚡91%</span></div>
+                  <div class="mock-body-t"><div class="mock-name-t">Lucía, 26</div><div class="mock-role-t">Diseñadora · Madrid</div>
+                  <div class="mock-chips-t"><span class="mock-chip-t">No fuma</span><span class="mock-chip-t">Ordenada</span></div></div>
+                </div>
+              </div>
+              <div class="mock-actions-t"><div class="mock-btn-t pass">✕</div><div class="mock-btn-t like">♥</div></div>
+            </div>
+          </div>
+          <div class="step-body-t">
+            <div class="step-num-t">PASO 1 DE 6 · BIENVENIDA</div>
+            <div class="step-title-t">¿Cómo funciona Convivio?</div>
+            <div class="step-desc-t">Convivio te ayuda a encontrar personas <strong>realmente compatibles</strong> para compartir piso. No es un portal de anuncios, es un sistema de matching por hábitos.</div>
+            <div class="step-tips-t">
+              <div class="tip-row-t"><span class="tip-icon-t">🎯</span><div class="tip-txt-t">El núcleo es encontrar <strong>con quién</strong> vivir, no solo dónde.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">⚡</span><div class="tip-txt-t">Calculamos un <strong>% de compatibilidad</strong> real basado en tus hábitos.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">💬</span><div class="tip-txt-t">El chat solo se abre si <strong>ambos os dais like</strong> (match mutuo).</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 1 -->
+        <div class="tour-step" id="tstep-1">
+          <div class="step-mockup">
+            <div class="mock-phone">
+              <div class="mock-topbar"><div class="mock-logo-t">con<b style="color:var(--g);font-weight:400">vivio</b></div><span style="font-size:8px;color:var(--mu)">Filtros</span></div>
+              <div class="mock-filters-t"><div class="mft-title">FILTROS DUROS · Excluyen perfiles</div>
+                <div class="mft-row"><span class="mft-label">Ciudad</span><div class="mft-track"><div class="mft-fill" style="width:100%"></div></div><span class="mft-val" style="color:var(--g)">Madrid</span></div>
+                <div class="mft-row"><span class="mft-label">Presupuesto</span><div class="mft-track"><div class="mft-fill" style="width:70%"></div></div><span class="mft-val">600€</span></div>
+                <div style="display:flex;gap:3px;margin-top:4px"><div style="padding:2px 5px;border-radius:4px;background:var(--tx);color:#fff;font-size:7px">No fumador</div></div>
+              </div>
+              <div class="mock-filters-t" style="margin:0 6px 6px"><div class="mft-title">PESOS BLANDOS · Ordenan el feed</div>
+                <div class="mft-row"><span class="mft-label">Limpieza</span><div class="mft-track"><div class="mft-fill" style="width:100%"></div></div><span class="mft-val">Mucho</span></div>
+                <div class="mft-row"><span class="mft-label">Horario</span><div class="mft-track"><div class="mft-fill" style="width:50%"></div></div><span class="mft-val">Normal</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="step-body-t">
+            <div class="step-num-t">PASO 2 DE 6 · FILTROS</div>
+            <div class="step-title-t">Filtros duros vs. pesos blandos</div>
+            <div class="step-desc-t">Dos tipos de filtros con efectos muy distintos sobre los perfiles que ves.</div>
+            <div class="step-tips-t">
+              <div class="tip-row-t"><span class="tip-icon-t">🚫</span><div class="tip-txt-t"><strong>Filtros duros</strong> — excluyen directamente. Si activas "No fumador", nunca verás fumadores.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">⚖️</span><div class="tip-txt-t"><strong>Pesos blandos</strong> — ordenan resultados. Limpieza al máximo → los más ordenados primero.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">💡</span><div class="tip-txt-t">Ajusta los pesos desde el panel izquierdo (escritorio) o desde tu perfil.</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="tour-step" id="tstep-2">
+          <div class="step-mockup">
+            <div class="mock-phone">
+              <div class="mock-topbar"><div class="mock-logo-t">con<b style="color:var(--g);font-weight:400">vivio</b></div></div>
+              <div style="padding:6px">
+                <div class="mock-card-t" style="position:relative">
+                  <div class="mock-photo-t" style="height:70px">👩‍⚕️<span class="mock-compat-t">⚡88%</span>
+                    <div style="position:absolute;top:6px;left:6px;background:rgba(255,255,255,.9);border-radius:4px;padding:1px 5px;font-size:6px;font-weight:700;color:var(--g);border:1px solid var(--g);transform:rotate(-12deg)">LIKE</div>
+                  </div>
+                  <div class="mock-body-t"><div class="mock-name-t">Paula, 27</div><div class="mock-role-t">Médica residente</div>
+                  <div class="mock-chips-t"><span class="mock-chip-t">Madrugadora</span><span class="mock-chip-t">Ordenada</span></div></div>
+                </div>
+                <div style="font-size:7px;color:var(--mu);text-align:center;margin-top:4px">← Arrastra para decidir →</div>
+              </div>
+              <div class="mock-actions-t">
+                <div class="mock-btn-t" style="font-size:8px">↩</div>
+                <div class="mock-btn-t pass">✕</div>
+                <div class="mock-btn-t like" style="width:32px;height:32px;font-size:12px">♥</div>
+                <div class="mock-btn-t" style="font-size:8px;color:#3478C8;border-color:#B5D4F4">★</div>
+              </div>
+            </div>
+          </div>
+          <div class="step-body-t">
+            <div class="step-num-t">PASO 3 DE 6 · EXPLORAR</div>
+            <div class="step-title-t">Desliza perfiles para decidir</div>
+            <div class="step-desc-t">Los perfiles aparecen ordenados por compatibilidad. Los más afines van primero.</div>
+            <div class="step-tips-t">
+              <div class="tip-row-t"><span class="tip-icon-t">♥</span><div class="tip-txt-t"><strong>Like</strong> — me interesa como compañero/a.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">✕</span><div class="tip-txt-t"><strong>Pass</strong> — no es la persona adecuada ahora.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">★</span><div class="tip-txt-t"><strong>Super like</strong> — interés especial. La persona recibe notificación.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">↩</span><div class="tip-txt-t"><strong>Deshacer</strong> — revierte el último swipe.</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div class="tour-step" id="tstep-3">
+          <div class="step-mockup">
+            <div class="mock-phone">
+              <div class="mock-topbar"><div class="mock-logo-t">con<b style="color:var(--g);font-weight:400">vivio</b></div></div>
+              <div style="padding:6px">
+                <div class="mock-match-t">
+                  <div class="mmt-icon">🎉</div>
+                  <div class="mmt-title">¡Match!</div>
+                  <div class="mmt-compat">91% compatibles</div>
+                  <div class="mmt-sub">Tú y Paula os habéis dado like mutuamente. ¡Chat abierto!</div>
+                  <button class="mmt-btn">Enviar mensaje</button>
+                </div>
+                <div style="margin-top:6px;font-size:7px;color:var(--mu);text-align:center">Con propietarios puedes escribir sin match previo</div>
+              </div>
+            </div>
+          </div>
+          <div class="step-body-t">
+            <div class="step-num-t">PASO 4 DE 6 · MATCH</div>
+            <div class="step-title-t">¿Cuándo se abre el chat?</div>
+            <div class="step-desc-t">El sistema de chat tiene dos reglas distintas según con quién hables.</div>
+            <div class="step-tips-t">
+              <div class="tip-row-t"><span class="tip-icon-t">👥</span><div class="tip-txt-t"><strong>Entre personas</strong> — match mutuo obligatorio. Ambos deben darse like.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">🏠</span><div class="tip-txt-t"><strong>Con propietarios</strong> — contacto libre. Escríbeles directamente sin esperar match.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">⏳</span><div class="tip-txt-t">Si alguien te dio like, aparece en <strong>"Esperando tu respuesta"</strong>.</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 4 -->
+        <div class="tour-step" id="tstep-4">
+          <div class="step-mockup">
+            <div class="mock-phone">
+              <div class="mock-topbar"><div class="mock-logo-t">con<b style="color:var(--g);font-weight:400">vivio</b></div>
+                <div class="mock-tabs-t"><div class="mock-tab-t">Personas</div><div class="mock-tab-t">Pisos</div><div class="mock-tab-t on">Matches</div></div>
+              </div>
+              <div class="mock-states-t">
+                <div class="mst-sect">ESPERANDO TU RESPUESTA</div>
+                <div class="mst-item"><div class="mst-av">🧑‍🎨</div><div class="mst-info"><div class="mst-name">Lucía</div><div class="mst-sub">Te dio like · ⚡91%</div></div><div class="mst-badge mst-pending">⏳ Pendiente</div></div>
+                <div class="mst-sect">MATCHES MUTUOS</div>
+                <div class="mst-item"><div class="mst-av">👩‍⚕️</div><div class="mst-info"><div class="mst-name">Paula</div><div class="mst-sub">¿Cuándo puedes ver el piso?</div></div><div class="mst-badge mst-mutual">✅ Chat</div></div>
+                <div class="mst-sect">LIKES ENVIADOS</div>
+                <div class="mst-item"><div class="mst-av">👨‍💻</div><div class="mst-info"><div class="mst-name">Marcos</div><div class="mst-sub">Esperando respuesta...</div></div><div class="mst-badge mst-sent">📤 Enviado</div></div>
+              </div>
+            </div>
+          </div>
+          <div class="step-body-t">
+            <div class="step-num-t">PASO 5 DE 6 · ESTADOS</div>
+            <div class="step-title-t">Tres estados en tu bandeja</div>
+            <div class="step-desc-t">La pestaña Matches agrupa todo para que sepas exactamente qué ha pasado.</div>
+            <div class="step-tips-t">
+              <div class="tip-row-t"><span class="tip-icon-t">⏳</span><div class="tip-txt-t"><strong>Esperando tu respuesta</strong> — alguien te dio like. Tú decides.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">✅</span><div class="tip-txt-t"><strong>Matches mutuos</strong> — chat abierto. Podéis coordinar visita.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">📤</span><div class="tip-txt-t"><strong>Likes enviados</strong> — esperando que el otro responda.</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 5 -->
+        <div class="tour-step" id="tstep-5">
+          <div class="step-mockup" style="background:var(--tx)">
+            <div style="text-align:center;color:#fff">
+              <div style="font-size:44px;margin-bottom:10px">🎉</div>
+              <div style="font-family:'Fraunces',serif;font-size:18px;margin-bottom:6px">¡Ya sabes cómo funciona!</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;max-width:180px;margin:0 auto">Completa tu perfil para conseguir mejores matches</div>
+              <div style="display:flex;justify-content:center;gap:14px;margin-top:14px;font-size:10px">
+                <div style="text-align:center;color:rgba(255,255,255,.45)"><div style="font-size:18px;margin-bottom:2px">✅</div>Email</div>
+                <div style="text-align:center;color:var(--gm)"><div style="font-size:18px;margin-bottom:2px">🛡</div>ID verificado</div>
+              </div>
+            </div>
+          </div>
+          <div class="step-body-t">
+            <div class="step-num-t">PASO 6 DE 6 · CONFIANZA</div>
+            <div class="step-title-t">Verificación y próximos pasos</div>
+            <div class="step-desc-t">Los perfiles verificados generan más confianza y consiguen más matches.</div>
+            <div class="step-tips-t">
+              <div class="tip-row-t"><span class="tip-icon-t">✅</span><div class="tip-txt-t"><strong>Email verificado</strong> — obligatorio al registrarte. Badge básico.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">🛡</span><div class="tip-txt-t"><strong>Verificado con ID</strong> — sube tu DNI. Badge especial visible en tu perfil.</div></div>
+              <div class="tip-row-t"><span class="tip-icon-t">📸</span><div class="tip-txt-t">Perfiles con foto y bio completa reciben muchos más likes.</div></div>
+            </div>
+          </div>
+        </div>
+        <!-- NAV TOUR -->
+        <div class="tour-nav-t">
+          <button class="btn-tprev" id="btnTPrev" onclick="tourPrev()" disabled>← Anterior</button>
+          <button class="btn-tnext" id="btnTNext" onclick="tourNext()">Siguiente →</button>
+          <button class="btn-tfinish" id="btnTFinish" onclick="closeHelp();goTStep(0)">¡Entendido! →</button>
+        </div>
+      </div>
+
+      <!-- FAQ -->
+      <div class="htab-content" id="hc-faq">
+        <div class="faq-list-t">
+          <div class="faq-item-t"><div class="faq-q-t" onclick="toggleFaqT(this)">¿Es gratis Convivio?<span class="faq-icon-t">+</span></div><div class="faq-a-t">Sí, completamente gratis en fase beta. El matching y el chat siempre serán accesibles de forma gratuita.</div></div>
+          <div class="faq-item-t"><div class="faq-q-t" onclick="toggleFaqT(this)">¿Cómo se calcula el % de compatibilidad?<span class="faq-icon-t">+</span></div><div class="faq-a-t">Combinamos filtros duros (ciudad, presupuesto, fumador) con factores blandos ponderables (horario, limpieza, ruido). Tú ajustas los pesos desde el panel de filtros.</div></div>
+          <div class="faq-item-t"><div class="faq-q-t" onclick="toggleFaqT(this)">¿Alguien puede escribirme sin que yo quiera?<span class="faq-icon-t">+</span></div><div class="faq-a-t">Entre personas, no. El chat solo se abre si los dos os dais like. La excepción es para pisos: si tienes habitación publicada, interesados pueden escribirte directamente.</div></div>
+          <div class="faq-item-t"><div class="faq-q-t" onclick="toggleFaqT(this)">¿Puedo cambiar mi rol después de registrarme?<span class="faq-icon-t">+</span></div><div class="faq-a-t">Sí. Cambia entre "Busco compañero/a", "Busco habitación" y "Ofrezco habitación" desde los ajustes de tu perfil en cualquier momento.</div></div>
+          <div class="faq-item-t"><div class="faq-q-t" onclick="toggleFaqT(this)">¿Cómo consigo el badge verificado con ID?<span class="faq-icon-t">+</span></div><div class="faq-a-t">Ve a tu perfil → Verificación → sube foto del DNI y un selfie. La revisión tarda menos de 24h. El badge aparece en tu tarjeta una vez verificado.</div></div>
+          <div class="faq-item-t"><div class="faq-q-t" onclick="toggleFaqT(this)">¿Puedo reportar un perfil sospechoso?<span class="faq-icon-t">+</span></div><div class="faq-a-t">Sí. En cualquier tarjeta hay un botón de reportar (⋯). El equipo de moderación revisa todos los reportes en menos de 48 horas.</div></div>
+        </div>
+      </div>
+
+      <!-- CONTACTO -->
+      <div class="htab-content" id="hc-contacto">
+        <div class="contact-wrap-t">
+          <div class="contact-card-t"><div class="cc-icon">💬</div><div class="cc-title">Chat de soporte</div><div class="cc-sub">Respuesta en menos de 24h en días laborables.</div><button class="btn-cc" onclick="closeHelp()">Próximamente →</button></div>
+          <div class="contact-card-t"><div class="cc-icon">✉️</div><div class="cc-title">Email</div><div class="cc-sub">Para privacidad, verificación o reportes urgentes.</div><a class="btn-cc" href="mailto:hola@convivio.app">hola@convivio.app</a></div>
+          <div class="contact-card-t"><div class="cc-icon">🐛</div><div class="cc-title">Reportar un error</div><div class="cc-sub">¿Algo no funciona bien? Cuéntanoslo.</div><button class="btn-cc" onclick="closeHelp()">Reportar →</button></div>
+          <div style="text-align:center;font-size:11px;color:var(--mu);margin-top:6px;line-height:1.6">Convivio beta · v0.3 · <a href="#" style="color:var(--g)">Privacidad</a></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* AYUDA */
+function openHelp(){document.getElementById('helpPanel').classList.add('open');}
+function closeHelp(){document.getElementById('helpPanel').classList.remove('open');}
+function switchHTab(btn,id){
+  document.querySelectorAll('.htab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.htab-content').forEach(c=>c.classList.remove('on'));
+  document.getElementById('hc-'+id).classList.add('on');
+}
+/* TOUR */
+const TSTEPS=6;let cTS=0;
+function renderTDots(){
+  document.getElementById('tourDots').innerHTML=Array.from({length:TSTEPS},(_,i)=>
+    `<div class="tdot ${i<cTS?'done':i===cTS?'current':''}" onclick="goTStep(${i})"></div>`).join('');
+  document.getElementById('tourLabel').textContent=`${cTS+1} de ${TSTEPS}`;
+}
+function goTStep(n){
+  document.querySelectorAll('.tour-step').forEach(s=>s.classList.remove('on'));
+  document.getElementById('tstep-'+n).classList.add('on');
+  cTS=n;renderTDots();
+  document.getElementById('btnTPrev').disabled=n===0;
+  document.getElementById('btnTNext').style.display=n===TSTEPS-1?'none':'inline-block';
+  document.getElementById('btnTFinish').style.display=n===TSTEPS-1?'inline-block':'none';
+  document.querySelector('.help-content').scrollTop=0;
+}
+function tourNext(){if(cTS<TSTEPS-1)goTStep(cTS+1);}
+function tourPrev(){if(cTS>0)goTStep(cTS-1);}
+/* FAQ */
+function toggleFaqT(qEl){
+  const item=qEl.parentElement;const was=item.classList.contains('open');
+  document.querySelectorAll('.faq-item-t').forEach(i=>i.classList.remove('open'));
+  if(!was)item.classList.add('open');
+}
+renderTDots();
+</script>
+
 </body>
 </html>

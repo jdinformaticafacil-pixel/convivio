@@ -176,6 +176,103 @@ footer{padding:32px 5vw;border-top:1px solid var(--bd)}
   .stats-row{gap:16px}
   .footer-in{flex-direction:column;text-align:center}
 }
+
+/* ══ AYUDA LANDING ══ */
+.help-fab-landing{position:fixed;bottom:28px;right:22px;z-index:500;display:flex;align-items:center;gap:8px;background:var(--tx);color:#fff;border:none;border-radius:28px;padding:10px 18px 10px 14px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 20px rgba(0,0,0,.18);transition:transform .15s,opacity .15s}
+.help-fab-landing:hover{transform:translateY(-2px);opacity:.92}
+.help-fab-landing span{font-size:16px}
+.hlp{position:fixed;inset:0;z-index:600;display:flex;align-items:center;justify-content:center;pointer-events:none;padding:16px}
+.hlp.open{pointer-events:all}
+.hlp-bd{position:absolute;inset:0;background:rgba(0,0,0,.5);opacity:0;transition:opacity .25s}
+.hlp.open .hlp-bd{opacity:1}
+.hlp-box{position:relative;z-index:1;width:100%;max-width:560px;max-height:90dvh;background:#fff;border-radius:20px;display:flex;flex-direction:column;transform:translateY(24px) scale(.97);opacity:0;transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .3s;overflow:hidden}
+.hlp.open .hlp-box{transform:none;opacity:1}
+.hlp-hdr{padding:18px 22px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.hlp-hdr-left{display:flex;align-items:center;gap:10px}
+.hlp-logo{font-family:'Fraunces',serif;font-size:18px;font-weight:400}
+.hlp-logo b{color:var(--g);font-weight:400}
+.hlp-badge{font-size:11px;background:var(--gl);color:var(--g);padding:3px 9px;border-radius:10px;font-weight:500}
+.hlp-close{background:none;border:none;cursor:pointer;font-size:18px;color:var(--mu);padding:4px 6px;border-radius:8px;transition:background .15s}
+.hlp-close:hover{background:var(--bg)}
+.hlp-tabs{display:flex;border-bottom:1px solid var(--bd);flex-shrink:0}
+.lhtab{flex:1;padding:11px;border:none;background:transparent;font-size:13px;color:var(--mu);cursor:pointer;font-family:'DM Sans',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s}
+.lhtab.on{color:var(--g);font-weight:500;border-bottom-color:var(--g)}
+.hlp-body{flex:1;overflow-y:auto}
+.lhc{display:none}.lhc.on{display:block}
+
+/* TOUR LANDING */
+.ltour-progress{padding:14px 22px 10px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:8px;position:sticky;top:0;background:#fff;z-index:2}
+.ltdot{width:28px;height:3px;border-radius:2px;background:var(--bd);transition:all .3s;cursor:pointer}
+.ltdot.done{background:var(--gm)}.ltdot.current{background:var(--g);width:36px}
+.ltour-label{font-size:11px;color:var(--mu);margin-left:auto}
+.ltstep{display:none}.ltstep.on{display:grid;grid-template-columns:1fr 1fr;min-height:320px}
+.lts-visual{background:var(--bg);border-right:1px solid var(--bd);display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+.lts-body{padding:22px 20px;display:flex;flex-direction:column;justify-content:center}
+.lts-num{font-size:10px;color:var(--g);font-weight:500;letter-spacing:.5px;margin-bottom:6px}
+.lts-title{font-family:'Fraunces',serif;font-size:19px;font-weight:400;line-height:1.25;margin-bottom:8px;letter-spacing:-.2px}
+.lts-desc{font-size:13px;color:var(--mu);line-height:1.65;margin-bottom:12px}
+.lts-tips{display:flex;flex-direction:column;gap:6px}
+.lts-tip{display:flex;align-items:flex-start;gap:7px;font-size:12px}
+.lts-tip-icon{font-size:14px;flex-shrink:0;margin-top:1px}
+.lts-tip-txt{color:var(--mu);line-height:1.5}
+.lts-tip-txt strong{color:var(--tx)}
+
+/* VISUALES del tour landing */
+.vis-card{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:14px;width:160px;box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.vis-card-av{width:40px;height:40px;border-radius:50%;background:var(--gl);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:8px}
+.vis-card-compat{display:inline-flex;align-items:center;gap:4px;background:var(--gl);color:var(--g);font-size:11px;font-weight:500;padding:3px 8px;border-radius:10px;margin-bottom:8px}
+.vis-card-name{font-family:'Fraunces',serif;font-size:14px;margin-bottom:2px}
+.vis-card-role{font-size:11px;color:var(--mu);margin-bottom:8px}
+.vis-chips{display:flex;flex-wrap:wrap;gap:4px}
+.vis-chip{font-size:10px;padding:2px 7px;border-radius:8px;background:var(--gl);color:var(--g)}
+.vis-chip.neutral{background:var(--bg);color:var(--mu);border:1px solid var(--bd)}
+.vis-match{background:#fff;border:2px solid var(--gm);border-radius:14px;padding:14px;width:160px;text-align:center}
+.vis-match-icon{font-size:32px;margin-bottom:6px}
+.vis-match-title{font-family:'Fraunces',serif;font-size:16px;color:var(--g);margin-bottom:3px}
+.vis-match-compat{font-size:20px;font-weight:500;color:var(--g);margin-bottom:4px}
+.vis-match-sub{font-size:10px;color:var(--mu);margin-bottom:8px;line-height:1.4}
+.vis-match-btn{background:var(--g);color:#fff;border:none;border-radius:12px;padding:5px 14px;font-size:11px;cursor:default}
+.vis-score-box{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:14px;width:160px}
+.vsb-score{font-family:'Fraunces',serif;font-size:32px;color:var(--g);margin-bottom:4px}
+.vsb-label{font-size:11px;color:var(--mu);margin-bottom:10px}
+.vsb-bar{display:flex;align-items:center;gap:6px;margin-bottom:5px;font-size:10px;color:var(--mu)}
+.vsb-track{flex:1;height:3px;background:var(--bd);border-radius:2px;overflow:hidden}
+.vsb-fill{height:100%;border-radius:2px;background:var(--g)}
+.vis-roles{display:flex;flex-direction:column;gap:7px;width:160px}
+.vis-rol{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:8px;font-size:12px}
+.vis-rol.active{border-color:var(--g);background:var(--gl)}
+.vis-rol-icon{font-size:16px}
+.vis-chat{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:10px;width:160px;display:flex;flex-direction:column;gap:5px}
+.vis-msg{padding:6px 9px;border-radius:10px;font-size:10px;line-height:1.4;max-width:80%}
+.vis-msg-them{background:var(--bg);border:1px solid var(--bd);align-self:flex-start;border-bottom-left-radius:2px}
+.vis-msg-me{background:var(--g);color:#fff;align-self:flex-end;border-bottom-right-radius:2px}
+
+/* NAV TOUR LANDING */
+.ltour-nav{display:flex;align-items:center;justify-content:space-between;padding:12px 22px;border-top:1px solid var(--bd);flex-shrink:0;background:#fff}
+.btn-ltprev{padding:8px 16px;border-radius:20px;border:1px solid var(--bd);background:transparent;font-size:13px;color:var(--mu);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.btn-ltprev:hover{border-color:var(--tx);color:var(--tx)}.btn-ltprev:disabled{opacity:.3;cursor:default}
+.btn-ltnext{padding:8px 20px;border-radius:20px;background:var(--g);color:#fff;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s}
+.btn-ltnext:hover{opacity:.85}
+.btn-ltfinish{padding:8px 20px;border-radius:20px;background:var(--tx);color:#fff;border:none;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;display:none;text-decoration:none}
+
+/* FAQ landing */
+.lfaq-list{padding:14px 20px;display:flex;flex-direction:column;gap:5px}
+.lfaq-item{border:1px solid var(--bd);border-radius:12px;overflow:hidden;transition:border-color .15s}
+.lfaq-item.open{border-color:var(--gm)}
+.lfaq-q{padding:12px 14px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;user-select:none}
+.lfaq-q:hover{background:var(--bg)}
+.lfaq-icon{font-size:15px;color:var(--mu);transition:transform .2s;flex-shrink:0}
+.lfaq-item.open .lfaq-icon{transform:rotate(45deg);color:var(--g)}
+.lfaq-a{display:none;padding:0 14px 12px;font-size:12px;color:var(--mu);line-height:1.65}
+.lfaq-item.open .lfaq-a{display:block}
+
+@media(max-width:640px){
+  .ltstep.on{grid-template-columns:1fr}
+  .lts-visual{display:none}
+  .hlp-box{max-height:95dvh;border-radius:20px 20px 0 0}
+  .hlp{align-items:flex-end;padding:0}
+}
+
 </style>
 </head>
 <body>
@@ -427,5 +524,216 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.fu').forEach(el => obs.observe(el));
 </script>
+
+<!-- BOTÓN AYUDA LANDING -->
+<button class="help-fab-landing" onclick="openLHelp()" aria-label="Tour y ayuda">
+  <span>🎯</span> ¿Cómo funciona?
+</button>
+
+<!-- PANEL AYUDA LANDING -->
+<div class="hlp" id="lHelpPanel">
+  <div class="hlp-bd" onclick="closeLHelp()"></div>
+  <div class="hlp-box">
+
+    <div class="hlp-hdr">
+      <div class="hlp-hdr-left">
+        <div class="hlp-logo">con<b>vivio</b></div>
+        <div class="hlp-badge">Tour rápido</div>
+      </div>
+      <button class="hlp-close" onclick="closeLHelp()">✕</button>
+    </div>
+
+    <div class="hlp-tabs">
+      <button class="lhtab on" onclick="switchLTab(this,'tour')">🎯 Tour</button>
+      <button class="lhtab" onclick="switchLTab(this,'faq')">❓ Preguntas</button>
+    </div>
+
+    <div class="hlp-body">
+
+      <!-- TOUR LANDING -->
+      <div class="lhc on" id="lhc-tour">
+        <div class="ltour-progress">
+          <div class="tour-ldots" id="lTourDots"></div>
+          <span class="ltour-label" id="lTourLabel">1 de 5</span>
+        </div>
+
+        <!-- Step 0: Qué es -->
+        <div class="ltstep on" id="lts-0">
+          <div class="lts-visual">
+            <div style="text-align:center">
+              <div style="font-family:'Fraunces',serif;font-size:36px;margin-bottom:8px">con<b style="color:var(--g);font-weight:400">vivio</b></div>
+              <div style="font-size:13px;color:var(--mu);max-width:140px;line-height:1.6">La app para encontrar con quién compartir piso</div>
+              <div style="display:flex;justify-content:center;gap:10px;margin-top:16px;font-size:11px;color:var(--mu)">
+                <div style="text-align:center"><div style="font-size:22px;margin-bottom:3px">👥</div>Personas</div>
+                <div style="font-size:18px;color:var(--g);align-self:center">→</div>
+                <div style="text-align:center"><div style="font-size:22px;margin-bottom:3px">⚡</div>Match</div>
+                <div style="font-size:18px;color:var(--g);align-self:center">→</div>
+                <div style="text-align:center"><div style="font-size:22px;margin-bottom:3px">🏠</div>Piso</div>
+              </div>
+            </div>
+          </div>
+          <div class="lts-body">
+            <div class="lts-num">PASO 1 DE 5 · QUÉ ES</div>
+            <div class="lts-title">No somos un portal de pisos</div>
+            <div class="lts-desc">Convivio conecta personas compatibles que quieren compartir piso. Primero encuentras <em>con quién</em> vivir, luego el <em>dónde</em>.</div>
+            <div class="lts-tips">
+              <div class="lts-tip"><span class="lts-tip-icon">🎯</span><div class="lts-tip-txt">El núcleo es el <strong>matching entre personas</strong>, no los anuncios de pisos.</div></div>
+              <div class="lts-tip"><span class="lts-tip-icon">⚡</span><div class="lts-tip-txt">Calculamos <strong>compatibilidad real</strong> por hábitos de convivencia.</div></div>
+              <div class="lts-tip"><span class="lts-tip-icon">🆓</span><div class="lts-tip-txt">Completamente <strong>gratuito</strong> en fase beta.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 1: Los tres roles -->
+        <div class="ltstep" id="lts-1">
+          <div class="lts-visual">
+            <div class="vis-roles">
+              <div class="vis-rol active"><span class="vis-rol-icon">🔍</span><div><div style="font-size:12px;font-weight:500">Busco compañero/a</div><div style="font-size:10px;color:var(--g)">Match mutuo → chat</div></div></div>
+              <div class="vis-rol"><span class="vis-rol-icon">🏠</span><div><div style="font-size:12px;font-weight:500">Busco habitación</div><div style="font-size:10px;color:var(--mu)">Exploro pisos</div></div></div>
+              <div class="vis-rol"><span class="vis-rol-icon">🗝</span><div><div style="font-size:12px;font-weight:500">Ofrezco habitación</div><div style="font-size:10px;color:var(--mu)">Recibo candidatos</div></div></div>
+            </div>
+          </div>
+          <div class="lts-body">
+            <div class="lts-num">PASO 2 DE 5 · QUIÉN ERES</div>
+            <div class="lts-title">Elige tu rol al registrarte</div>
+            <div class="lts-desc">El flujo de la app cambia completamente según qué busques. No mezcles los tres casos en uno.</div>
+            <div class="lts-tips">
+              <div class="lts-tip"><span class="lts-tip-icon">🔍</span><div class="lts-tip-txt"><strong>Busco compañero/a</strong> — match mutuo obligatorio, chat solo si ambos se dan like.</div></div>
+              <div class="lts-tip"><span class="lts-tip-icon">🏠</span><div class="lts-tip-txt"><strong>Busco habitación</strong> — exploro pisos y contacto libre con el propietario.</div></div>
+              <div class="lts-tip"><span class="lts-tip-icon">🗝</span><div class="lts-tip-txt"><strong>Ofrezco habitación</strong> — publico y recibo candidatos ordenados por compatibilidad.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Compatibilidad -->
+        <div class="ltstep" id="lts-2">
+          <div class="lts-visual">
+            <div class="vis-score-box">
+              <div class="vsb-score">91%</div>
+              <div class="vsb-label">compatibilidad con Lucía</div>
+              <div class="vsb-bar"><span style="width:58px">Ciudad</span><div class="vsb-track"><div class="vsb-fill" style="width:100%"></div></div><span style="font-size:10px;font-weight:500;color:var(--g)">30pt</span></div>
+              <div class="vsb-bar"><span style="width:58px">Presupuesto</span><div class="vsb-track"><div class="vsb-fill" style="width:88%"></div></div><span style="font-size:10px;font-weight:500">22pt</span></div>
+              <div class="vsb-bar"><span style="width:58px">Horario</span><div class="vsb-track"><div class="vsb-fill" style="width:100%"></div></div><span style="font-size:10px;font-weight:500">15pt</span></div>
+              <div class="vsb-bar"><span style="width:58px">Limpieza</span><div class="vsb-track"><div class="vsb-fill" style="width:80%"></div></div><span style="font-size:10px;font-weight:500">12pt</span></div>
+              <div class="vsb-bar"><span style="width:58px">Ruido</span><div class="vsb-track"><div class="vsb-fill" style="width:60%"></div></div><span style="font-size:10px;font-weight:500">8pt</span></div>
+            </div>
+          </div>
+          <div class="lts-body">
+            <div class="lts-num">PASO 3 DE 5 · CÓMO FUNCIONA</div>
+            <div class="lts-title">Compatibilidad real, no al azar</div>
+            <div class="lts-desc">Calculamos un score 0–100 combinando 6 factores reales de convivencia. Tú decides cuánto pesa cada uno.</div>
+            <div class="lts-tips">
+              <div class="lts-tip"><span class="lts-tip-icon">🏙</span><div class="lts-tip-txt"><strong>Ciudad y fumador/a</strong> son filtros duros. Si no coinciden, el perfil no aparece.</div></div>
+              <div class="lts-tip"><span class="lts-tip-icon">⚖️</span><div class="lts-tip-txt"><strong>Horario, limpieza y ruido</strong> son factores blandos. Ajusta su peso según lo que más te importe.</div></div>
+              <div class="lts-tip"><span class="lts-tip-icon">📊</span><div class="lts-tip-txt">El feed ordena perfiles de <strong>más a menos compatible</strong>. Los mejores siempre van primero.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Match y chat -->
+        <div class="ltstep" id="lts-3">
+          <div class="lts-visual">
+            <div class="vis-match">
+              <div class="vis-match-icon">🎉</div>
+              <div class="vis-match-title">¡Match!</div>
+              <div class="vis-match-compat">91%</div>
+              <div class="vis-match-sub">Tú y Lucía os habéis dado like mutuamente. El chat está abierto.</div>
+              <button class="vis-match-btn">Enviar mensaje →</button>
+            </div>
+          </div>
+          <div class="lts-body">
+            <div class="lts-num">PASO 4 DE 5 · EL MATCH</div>
+            <div class="lts-title">Match mutuo = chat abierto</div>
+            <div class="lts-desc">Nadie puede escribirte sin que tú también hayas mostrado interés. Sin spam, sin mensajes no deseados.</div>
+            <div class="lts-tips">
+              <div class="lts-tip"><span class="lts-tip-icon">♥</span><div class="lts-tip-txt">Tú le das like → ella te da like → <strong>chat habilitado automáticamente</strong>.</div></div>
+              <div class="lts-tip"><span class="lts-tip-icon">🏠</span><div class="lts-tip-txt">Con propietarios de pisos: <strong>contacto libre</strong>, sin necesidad de match previo.</div></div>
+              <div class="lts-tip"><span class="lts-tip-icon">⏳</span><div class="lts-tip-txt">Si alguien te da like primero, aparece en "Esperando tu respuesta". Tú decides.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Empieza -->
+        <div class="ltstep" id="lts-4">
+          <div class="lts-visual" style="background:var(--tx)">
+            <div style="text-align:center;color:#fff">
+              <div style="font-size:48px;margin-bottom:12px">🚀</div>
+              <div style="font-family:'Fraunces',serif;font-size:20px;margin-bottom:8px">¿Listo/a para empezar?</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.55);line-height:1.6;max-width:160px;margin:0 auto">Registro en 4 minutos. Gratis. Sin tarjeta.</div>
+              <div style="margin-top:16px;font-size:11px;color:rgba(255,255,255,.4)">Fase beta · 10 ciudades disponibles</div>
+            </div>
+          </div>
+          <div class="lts-body">
+            <div class="lts-num">PASO 5 DE 5 · EMPIEZA</div>
+            <div class="lts-title">4 minutos para estar dentro</div>
+            <div class="lts-desc">El registro está diseñado para ser rápido y útil. Cuanto más completo sea tu perfil, mejores matches conseguirás.</div>
+            <div class="lts-tips">
+              <div class="lts-tip"><span class="lts-tip-icon">✏️</span><div class="lts-tip-txt"><strong>Crea tu cuenta</strong> — email y contraseña. Sin tarjeta.</div></div>
+              <div class="lts-tip"><span class="lts-tip-icon">🎯</span><div class="lts-tip-txt"><strong>Elige tu rol</strong> — busco compañero, habitación u ofrezco.</div></div>
+              <div class="lts-tip"><span class="lts-tip-icon">⚙️</span><div class="lts-tip-txt"><strong>Configura hábitos</strong> — presupuesto, horario, limpieza y pesos del algoritmo.</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ltour-nav">
+          <button class="btn-ltprev" id="btnLTPrev" onclick="lTourPrev()" disabled>← Anterior</button>
+          <button class="btn-ltnext" id="btnLTNext" onclick="lTourNext()">Siguiente →</button>
+          <a href="register.html" class="btn-ltfinish" id="btnLTFinish">Crear cuenta gratis →</a>
+        </div>
+      </div>
+
+      <!-- FAQ LANDING -->
+      <div class="lhc" id="lhc-faq">
+        <div class="lfaq-list">
+          <div class="lfaq-item"><div class="lfaq-q" onclick="toggleLFaq(this)">¿Es gratis Convivio?<span class="lfaq-icon">+</span></div><div class="lfaq-a">Sí, completamente gratis en fase beta. El matching y el chat siempre serán gratuitos.</div></div>
+          <div class="lfaq-item"><div class="lfaq-q" onclick="toggleLFaq(this)">¿En qué ciudades está disponible?<span class="lfaq-icon">+</span></div><div class="lfaq-a">Actualmente en fase beta en 10 ciudades españolas: Madrid, Barcelona, Valencia, Sevilla, Bilbao, Málaga, Zaragoza, Granada, Murcia y Alicante. Próximamente más.</div></div>
+          <div class="lfaq-item"><div class="lfaq-q" onclick="toggleLFaq(this)">¿Tengo que dar mi DNI para registrarme?<span class="lfaq-icon">+</span></div><div class="lfaq-a">No. El DNI es completamente opcional. Solo lo necesitas si quieres el badge de "Verificado con ID", que aumenta la confianza de otros usuarios. El registro solo requiere email.</div></div>
+          <div class="lfaq-item"><div class="lfaq-q" onclick="toggleLFaq(this)">¿Cómo sé que los perfiles son reales?<span class="lfaq-icon">+</span></div><div class="lfaq-a">Todos los perfiles requieren verificación de email. El badge de ID garantiza que la persona ha subido un documento real. Además puedes reportar perfiles sospechosos desde la app.</div></div>
+          <div class="lfaq-item"><div class="lfaq-q" onclick="toggleLFaq(this)">¿Convivio gestiona contratos o pagos?<span class="lfaq-icon">+</span></div><div class="lfaq-a">No, al menos en esta fase. Convivio te ayuda a encontrar a la persona adecuada. El contrato de alquiler, el pago y los acuerdos de convivencia los gestionáis vosotros directamente.</div></div>
+          <div class="lfaq-item"><div class="lfaq-q" onclick="toggleLFaq(this)">¿Puedo usar Convivio si ya tengo piso?<span class="lfaq-icon">+</span></div><div class="lfaq-a">Sí. Si tienes piso puedes elegir el rol "Ofrezco habitación" y publicar tu anuncio. Recibirás candidatos ordenados por compatibilidad real con tu estilo de vida.</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* AYUDA LANDING */
+function openLHelp(){document.getElementById('lHelpPanel').classList.add('open');}
+function closeLHelp(){document.getElementById('lHelpPanel').classList.remove('open');}
+function switchLTab(btn,id){
+  document.querySelectorAll('.lhtab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  document.querySelectorAll('.lhc').forEach(c=>c.classList.remove('on'));
+  document.getElementById('lhc-'+id).classList.add('on');
+}
+/* TOUR LANDING */
+const LTS=5;let cLTS=0;
+function renderLDots(){
+  document.getElementById('lTourDots').innerHTML=Array.from({length:LTS},(_,i)=>
+    `<div class="ltdot ${i<cLTS?'done':i===cLTS?'current':''}" onclick="goLTS(${i})"></div>`).join('');
+  document.getElementById('lTourLabel').textContent=`${cLTS+1} de ${LTS}`;
+}
+function goLTS(n){
+  document.querySelectorAll('.ltstep').forEach(s=>s.classList.remove('on'));
+  document.getElementById('lts-'+n).classList.add('on');
+  cLTS=n;renderLDots();
+  document.getElementById('btnLTPrev').disabled=n===0;
+  document.getElementById('btnLTNext').style.display=n===LTS-1?'none':'inline-block';
+  document.getElementById('btnLTFinish').style.display=n===LTS-1?'inline-block':'none';
+  document.querySelector('.hlp-body').scrollTop=0;
+}
+function lTourNext(){if(cLTS<LTS-1)goLTS(cLTS+1);}
+function lTourPrev(){if(cLTS>0)goLTS(cLTS-1);}
+/* FAQ */
+function toggleLFaq(qEl){
+  const item=qEl.parentElement;const was=item.classList.contains('open');
+  document.querySelectorAll('.lfaq-item').forEach(i=>i.classList.remove('open'));
+  if(!was)item.classList.add('open');
+}
+renderLDots();
+</script>
+
 </body>
 </html>

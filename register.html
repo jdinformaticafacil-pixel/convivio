@@ -5,379 +5,544 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Convivio — Crear cuenta</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
 <style>
-:root{--green:#1A8C68;--green-light:#E8F5F0;--green-mid:#4DB892;--text:#1A1A18;--muted:#6B6B67;--border:#E2E2DC;--bg:#FAFAF7;--white:#FFFFFF;--radius:14px;--danger:#E24B4A}
+:root{--g:#1A8C68;--gl:#E8F5F0;--gm:#4DB892;--tx:#1A1A18;--mu:#6B6B67;--bd:#E2E2DC;--bg:#FAFAF7;--wh:#FFFFFF;--r:14px;--danger:#C94040}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100dvh;display:flex;flex-direction:column}
-a{color:var(--green);text-decoration:none}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100dvh;display:flex}
+a{color:var(--g);text-decoration:none}
 
-.page{display:flex;flex:1;min-height:100dvh}
+/* LAYOUT */
+.left{width:400px;flex-shrink:0;background:var(--tx);padding:44px 40px;display:flex;flex-direction:column;justify-content:space-between}
+.left-logo{font-family:'Fraunces',serif;font-size:22px;color:#fff;margin-bottom:44px}
+.left-logo b{color:var(--gm);font-weight:400}
+.left-h{font-family:'Fraunces',serif;font-size:30px;font-weight:400;color:#fff;line-height:1.2;letter-spacing:-.4px;margin-bottom:16px}
+.left-h em{color:var(--gm);font-style:italic}
+.left-p{font-size:14px;color:rgba(255,255,255,.5);line-height:1.7;margin-bottom:32px}
+.role-preview{display:flex;flex-direction:column;gap:8px}
+.rp-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);transition:all .2s}
+.rp-item.active{background:rgba(77,184,146,.15);border-color:rgba(77,184,146,.3)}
+.rp-icon{font-size:18px;width:28px;text-align:center}
+.rp-text{font-size:13px;color:rgba(255,255,255,.55)}
+.rp-item.active .rp-text{color:rgba(255,255,255,.85)}
+.left-foot{font-size:12px;color:rgba(255,255,255,.25)}
 
-/* LADO IZQUIERDO (desktop) */
-.left-panel{width:420px;flex-shrink:0;background:var(--text);padding:48px 40px;display:flex;flex-direction:column;justify-content:space-between}
-.left-logo{font-family:'Fraunces',serif;font-size:24px;color:#fff;margin-bottom:48px}
-.left-logo span{color:var(--green-mid)}
-.left-claim{font-family:'Fraunces',serif;font-size:34px;font-weight:400;color:#fff;line-height:1.2;margin-bottom:20px;letter-spacing:-.5px}
-.left-claim em{color:var(--green-mid);font-style:italic}
-.left-sub{font-size:15px;color:rgba(255,255,255,.55);line-height:1.7;margin-bottom:40px}
-.left-stats{display:flex;gap:28px}
-.ls-num{font-family:'Fraunces',serif;font-size:26px;color:var(--green-mid)}
-.ls-label{font-size:12px;color:rgba(255,255,255,.45)}
-.left-bottom{font-size:13px;color:rgba(255,255,255,.3)}
-
-/* LADO DERECHO */
-.right-panel{flex:1;display:flex;align-items:flex-start;justify-content:center;padding:40px 24px;overflow-y:auto}
-.form-wrap{width:100%;max-width:460px}
+.right{flex:1;overflow-y:auto;padding:40px 32px;display:flex;justify-content:center}
+.form-wrap{width:100%;max-width:440px}
 
 /* PROGRESS */
-.progress-bar{display:flex;gap:6px;margin-bottom:32px}
-.pb-dot{flex:1;height:3px;border-radius:2px;background:var(--border);transition:background .3s}
-.pb-dot.done{background:var(--green)}
+.progress{display:flex;gap:5px;margin-bottom:28px}
+.pb{flex:1;height:3px;border-radius:2px;background:var(--bd);transition:background .3s}
+.pb.done{background:var(--g)}
+.step-badge{font-size:11px;color:var(--g);font-weight:500;letter-spacing:.5px;margin-bottom:6px}
+.step-title{font-family:'Fraunces',serif;font-size:26px;font-weight:400;margin-bottom:6px;letter-spacing:-.3px}
+.step-sub{font-size:14px;color:var(--mu);margin-bottom:24px;line-height:1.6}
 
-.step-badge{font-size:12px;color:var(--green);font-weight:500;letter-spacing:.5px;margin-bottom:8px}
-.step-title{font-family:'Fraunces',serif;font-size:28px;font-weight:400;margin-bottom:6px}
-.step-sub{font-size:14px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+/* STEPS */
+.step{display:none}.step.on{display:block}
 
-.field{margin-bottom:16px}
-.field label{display:block;font-size:13px;color:var(--muted);margin-bottom:5px}
-.field input,.field select,.field textarea{width:100%;border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:14px;background:var(--white);color:var(--text);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--green-mid)}
-.field.error input,.field.error select{border-color:var(--danger)}
-.field-err{font-size:12px;color:var(--danger);margin-top:4px;display:none}
-.field.error .field-err{display:block}
-.field textarea{resize:none;height:88px;line-height:1.6}
+/* FORM FIELDS */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:13px;color:var(--mu);margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--bd);border-radius:10px;padding:10px 13px;font-size:14px;background:var(--wh);color:var(--tx);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .15s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gm)}
+.field.err input,.field.err select{border-color:var(--danger)}
+.ferr{font-size:12px;color:var(--danger);margin-top:3px;display:none}
+.field.err .ferr{display:block}
+.field textarea{resize:none;height:84px;line-height:1.6}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-/* ROL CARDS */
-.rol-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
-.rol-card{border:1px solid var(--border);border-radius:var(--radius);padding:18px 14px;text-align:center;cursor:pointer;transition:all .15s;background:var(--white)}
-.rol-card:hover{border-color:var(--green-mid)}
-.rol-card.sel{border:2px solid var(--green);background:var(--green-light)}
-.rol-icon{font-size:30px;margin-bottom:8px}
-.rol-name{font-size:14px;font-weight:500;margin-bottom:3px}
-.rol-desc{font-size:12px;color:var(--muted)}
+/* ROL CARDS — primer punto de bifurcación */
+.rol-grid{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.rol-card{border:1px solid var(--bd);border-radius:var(--r);padding:16px;cursor:pointer;transition:all .15s;background:var(--wh);display:flex;align-items:flex-start;gap:14px}
+.rol-card:hover{border-color:var(--gm)}
+.rol-card.sel{border:2px solid var(--g);background:var(--gl)}
+.rol-card-icon{font-size:24px;margin-top:2px;flex-shrink:0}
+.rol-card-title{font-size:15px;font-weight:500;margin-bottom:3px}
+.rol-card-desc{font-size:12px;color:var(--mu);line-height:1.5}
+.rol-card-flow{font-size:11px;color:var(--g);margin-top:6px;font-weight:500}
+
+/* FILTROS DUROS — se muestran según rol */
+.hard-filters{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:14px}
+.hf-title{font-size:11px;font-weight:500;color:var(--mu);letter-spacing:.5px;margin-bottom:10px}
+.hf-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;font-size:13px}
+.hf-label{color:var(--tx)}
+.hf-note{font-size:11px;color:var(--danger);font-weight:500}
+.toggle-row{display:flex;gap:6px}
+.toggle-btn{padding:5px 12px;border-radius:16px;border:1px solid var(--bd);background:var(--wh);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--mu);transition:all .12s}
+.toggle-btn.sel{background:var(--tx);color:#fff;border-color:var(--tx)}
+
+/* PESOS AJUSTABLES — slider por factor */
+.weights-section{margin-bottom:14px}
+.ws-title{font-size:13px;font-weight:500;margin-bottom:4px}
+.ws-sub{font-size:12px;color:var(--mu);margin-bottom:12px;line-height:1.5}
+.weight-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.wr-label{font-size:12px;color:var(--mu);width:80px;flex-shrink:0}
+.wr-slider{flex:1;accent-color:var(--g)}
+.wr-val{font-size:12px;font-weight:500;color:var(--tx);min-width:36px;text-align:right}
+.wr-impact{font-size:10px;color:var(--mu);min-width:40px;text-align:right}
 
 /* CHIPS */
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
-.chip{padding:7px 14px;border-radius:20px;border:1px solid var(--border);background:var(--white);font-size:13px;cursor:pointer;color:var(--muted);transition:all .12s;font-family:'DM Sans',sans-serif;user-select:none}
-.chip.sel{background:var(--green-light);color:var(--green);border-color:var(--green-mid)}
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.chip{padding:6px 13px;border-radius:18px;border:1px solid var(--bd);background:var(--wh);font-size:13px;cursor:pointer;color:var(--mu);transition:all .12s;font-family:'DM Sans',sans-serif;user-select:none}
+.chip.sel{background:var(--gl);color:var(--g);border-color:var(--gm)}
 
-/* RANGE */
-.range-row{display:flex;align-items:center;gap:12px;margin-top:6px}
-.range-row input[type=range]{flex:1;accent-color:var(--green)}
-.range-val{font-size:14px;font-weight:500;min-width:55px;text-align:right;color:var(--text)}
+/* AVATAR */
+.avatar-wrap{text-align:center;margin-bottom:20px}
+.avatar-circle{width:84px;height:84px;border-radius:50%;border:2px dashed var(--bd);background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;margin:0 auto 6px;font-size:13px;color:var(--mu);flex-direction:column;gap:3px;transition:all .2s}
+.avatar-circle:hover{border-color:var(--gm);background:var(--gl)}
+.avatar-circle.has{border-style:solid;border-color:var(--g);font-size:48px}
+.avatar-hint{font-size:11px;color:var(--mu)}
 
-/* STARS */
-.stars{display:flex;gap:8px;margin-top:6px}
-.star{font-size:24px;cursor:pointer;color:var(--border);transition:color .1s}
-.star.on{color:#EF9F27}
-
-/* AVATAR UPLOAD */
-.avatar-zone{display:flex;flex-direction:column;align-items:center;margin-bottom:24px}
-.avatar-circle{width:90px;height:90px;border-radius:50%;border:2px dashed var(--border);background:var(--bg);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--muted);transition:all .2s;flex-direction:column;gap:4px;margin-bottom:8px}
-.avatar-circle:hover{border-color:var(--green-mid);background:var(--green-light)}
-.avatar-circle.has{border-style:solid;border-color:var(--green);font-size:52px}
-.avatar-hint{font-size:12px;color:var(--muted)}
-
-/* VERIFY */
-.verify-box{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:20px}
-.verify-email{font-size:15px;font-weight:500}
-.verify-hint{font-size:13px;color:var(--muted);margin-top:2px}
+/* VERIFICACIÓN */
+.verify-box{background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:16px}
+.verify-email-display{font-size:15px;font-weight:500}
+.verify-hint{font-size:12px;color:var(--mu);margin-top:2px}
 .code-input{letter-spacing:8px;font-size:22px;text-align:center;font-weight:500}
 
+/* RANGE */
+.range-row{display:flex;align-items:center;gap:10px;margin-top:5px}
+.range-row input[type=range]{flex:1;accent-color:var(--g)}
+.range-val{font-size:14px;font-weight:500;min-width:60px;text-align:right}
+
+/* STARS */
+.stars{display:flex;gap:7px;margin-top:5px}
+.star{font-size:22px;cursor:pointer;color:var(--bd);transition:color .1s}
+.star.on{color:#EF9F27}
+
 /* BUTTONS */
-.btn-next{width:100%;padding:14px;border-radius:28px;background:var(--green);color:#fff;border:none;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s;margin-top:4px}
-.btn-next:hover{opacity:.85}
-.btn-back{width:100%;padding:11px;border-radius:28px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;transition:border-color .15s}
-.btn-back:hover{border-color:var(--text);color:var(--text)}
-.step{display:none}.step.active{display:block}
+.btn-next{width:100%;padding:13px;border-radius:26px;background:var(--g);color:#fff;border:none;font-size:15px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s;margin-top:6px}
+.btn-next:hover{opacity:.86}
+.btn-back{width:100%;padding:10px;border-radius:26px;background:transparent;border:1px solid var(--bd);color:var(--mu);font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px;transition:border-color .15s}
+.btn-back:hover{border-color:var(--tx);color:var(--tx)}
+.login-link{text-align:center;font-size:13px;color:var(--mu);margin-top:18px}
 
 /* SUCCESS */
-.success-wrap{text-align:center;padding-top:20px}
-.success-icon{font-size:64px;margin-bottom:16px}
-.success-title{font-family:'Fraunces',serif;font-size:30px;margin-bottom:8px}
-.success-sub{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:28px;max-width:340px;margin-left:auto;margin-right:auto}
-.btn-go{display:inline-block;background:var(--green);color:#fff;padding:14px 36px;border-radius:28px;font-size:15px;font-weight:500;text-decoration:none}
-
-/* LOGIN LINK */
-.login-link{text-align:center;font-size:14px;color:var(--muted);margin-top:20px}
+.success{text-align:center;padding-top:16px}
+.success-icon{font-size:60px;margin-bottom:14px}
+.success-title{font-family:'Fraunces',serif;font-size:28px;font-weight:400;margin-bottom:8px}
+.success-sub{font-size:14px;color:var(--mu);line-height:1.7;margin-bottom:24px;max-width:320px;margin-left:auto;margin-right:auto}
+.btn-go{display:inline-block;background:var(--g);color:#fff;padding:13px 32px;border-radius:26px;font-size:15px;font-weight:500;text-decoration:none}
 
 /* RESPONSIVE */
-@media(max-width:800px){
-  .left-panel{display:none}
-  .right-panel{padding:28px 20px}
-}
-@media(max-width:420px){
-  .row2{grid-template-columns:1fr}
-  .rol-grid{grid-template-columns:1fr 1fr}
-}
+@media(max-width:820px){.left{display:none}.right{padding:28px 20px}}
+@media(max-width:420px){.row2{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<div class="page">
-  <div class="left-panel">
-    <div>
-      <div class="left-logo">con<span>vivio</span></div>
-      <div class="left-claim">Tu próxima <em>convivencia</em> empieza aquí</div>
-      <div class="left-sub">Miles de personas encontraron compañero/a de piso ideal gracias al sistema de match por hábitos de Convivio.</div>
-      <div class="left-stats">
-        <div><div class="ls-num">18k+</div><div class="ls-label">Usuarios</div></div>
-        <div><div class="ls-num">94%</div><div class="ls-label">Satisfacción</div></div>
-        <div><div class="ls-num">32</div><div class="ls-label">Ciudades</div></div>
+<div class="left">
+  <div>
+    <div class="left-logo">con<b>vivio</b></div>
+    <div class="left-h">Empieza eligiendo <em>qué buscas</em></div>
+    <div class="left-p">El flujo de registro cambia según tu objetivo. No es lo mismo buscar compañero que ofrecer habitación.</div>
+    <div class="role-preview">
+      <div class="rp-item" id="lp-companero">
+        <div class="rp-icon">🔍</div>
+        <div class="rp-text">Busco compañero/a de piso</div>
+      </div>
+      <div class="rp-item" id="lp-habitacion">
+        <div class="rp-icon">🏠</div>
+        <div class="rp-text">Busco habitación libre</div>
+      </div>
+      <div class="rp-item" id="lp-ofrezco">
+        <div class="rp-icon">🗝</div>
+        <div class="rp-text">Ofrezco habitación en mi piso</div>
       </div>
     </div>
-    <div class="left-bottom">© 2025 Convivio · Privacidad · Términos</div>
   </div>
+  <div class="left-foot">© 2025 Convivio · Fase beta privada</div>
+</div>
 
-  <div class="right-panel">
-    <div class="form-wrap">
-      <div class="progress-bar" id="progressBar"></div>
+<div class="right">
+  <div class="form-wrap">
+    <div class="progress" id="progressBar"></div>
 
-      <!-- PASO 1 -->
-      <div class="step active" id="s0">
-        <div class="step-badge">PASO 1 DE 5</div>
-        <div class="step-title">Crea tu cuenta</div>
-        <div class="step-sub">Gratis, sin tarjeta. Solo tarda 3 minutos.</div>
-        <div class="row2">
-          <div class="field" id="f-nombre-wrap">
-            <label>Nombre</label>
-            <input type="text" id="f-nombre" placeholder="Ana"/>
-            <div class="field-err">Campo obligatorio</div>
-          </div>
-          <div class="field">
-            <label>Apellido</label>
-            <input type="text" id="f-apellido" placeholder="García"/>
-          </div>
-        </div>
-        <div class="field" id="f-email-wrap">
-          <label>Email</label>
-          <input type="email" id="f-email" placeholder="ana@email.com"/>
-          <div class="field-err">Email no válido</div>
-        </div>
-        <div class="field" id="f-pass-wrap">
-          <label>Contraseña</label>
-          <input type="password" id="f-pass" placeholder="Mínimo 8 caracteres"/>
-          <div class="field-err">Mínimo 8 caracteres</div>
-        </div>
-        <button class="btn-next" onclick="next(0)">Continuar →</button>
-        <div class="login-link">¿Ya tienes cuenta? <a href="app.html">Inicia sesión</a></div>
-      </div>
-
-      <!-- PASO 2 -->
-      <div class="step" id="s1">
-        <div class="step-badge">PASO 2 DE 5</div>
-        <div class="step-title">¿Qué buscas?</div>
-        <div class="step-sub">Puedes cambiarlo en cualquier momento desde tu perfil.</div>
-        <div class="rol-grid">
-          <div class="rol-card" id="rol-b" onclick="setRol('b')">
-            <div class="rol-icon">🔍</div>
-            <div class="rol-name">Busco piso</div>
-            <div class="rol-desc">Quiero habitación o compañeros</div>
-          </div>
-          <div class="rol-card" id="rol-p" onclick="setRol('p')">
-            <div class="rol-icon">🏠</div>
-            <div class="rol-name">Tengo piso</div>
-            <div class="rol-desc">Ofrezco habitación o busco compañeros</div>
-          </div>
-        </div>
-        <button class="btn-next" onclick="next(1)">Continuar →</button>
-        <button class="btn-back" onclick="back(1)">← Volver</button>
-      </div>
-
-      <!-- PASO 3 -->
-      <div class="step" id="s2">
-        <div class="step-badge">PASO 3 DE 5</div>
-        <div class="step-title">Tu perfil público</div>
-        <div class="step-sub">Lo primero que verán los demás usuarios.</div>
-        <div class="avatar-zone">
-          <div class="avatar-circle" id="avatarCircle" onclick="fakePhoto()">
-            <span>📷</span><span>Subir foto</span>
-          </div>
-          <div class="avatar-hint">JPG o PNG · máx. 5MB</div>
-        </div>
-        <div class="row2">
-          <div class="field" id="f-ciudad-wrap">
-            <label>Ciudad</label>
-            <select id="f-ciudad">
-              <option value="">Selecciona...</option>
-              <option>Madrid</option><option>Barcelona</option><option>Valencia</option>
-              <option>Sevilla</option><option>Bilbao</option><option>Málaga</option>
-              <option>Zaragoza</option><option>Granada</option><option>Otra</option>
-            </select>
-            <div class="field-err">Selecciona tu ciudad</div>
-          </div>
-          <div class="field" id="f-edad-wrap">
-            <label>Edad</label>
-            <input type="number" id="f-edad" placeholder="25" min="18" max="80"/>
-            <div class="field-err">Introduce tu edad</div>
-          </div>
-        </div>
-        <div class="field" id="f-bio-wrap">
-          <label>Preséntate en dos frases</label>
-          <textarea id="f-bio" placeholder="Soy diseñadora, madrugadora y tengo gato. Busco piso tranquilo cerca del metro..."></textarea>
-          <div class="field-err">Añade una pequeña bio</div>
-        </div>
-        <button class="btn-next" onclick="next(2)">Continuar →</button>
-        <button class="btn-back" onclick="back(2)">← Volver</button>
-      </div>
-
-      <!-- PASO 4 -->
-      <div class="step" id="s3">
-        <div class="step-badge">PASO 4 DE 5</div>
-        <div class="step-title">Tus hábitos</div>
-        <div class="step-sub">Esto nos permite encontrar personas realmente compatibles contigo.</div>
-        <div class="field">
-          <label>Presupuesto máximo</label>
-          <div class="range-row">
-            <input type="range" id="presup" min="150" max="1500" step="50" value="500" oninput="updPresup()"/>
-            <span class="range-val" id="presup-val">500 €/mes</span>
-          </div>
+    <!-- PASO 0: CUENTA -->
+    <div class="step on" id="s0">
+      <div class="step-badge">PASO 1 DE 5</div>
+      <div class="step-title">Crea tu cuenta</div>
+      <div class="step-sub">Gratis. Sin tarjeta. Tarda 4 minutos.</div>
+      <div class="row2">
+        <div class="field" id="fw-nombre">
+          <label>Nombre</label>
+          <input type="text" id="f-nombre" placeholder="Ana"/>
+          <div class="ferr">Obligatorio</div>
         </div>
         <div class="field">
-          <label>Horario</label>
-          <div class="chips">
-            <div class="chip" onclick="singleChip(this,'horario')">Madrugador/a</div>
-            <div class="chip" onclick="singleChip(this,'horario')">Nocturno/a</div>
-            <div class="chip" onclick="singleChip(this,'horario')">Flexible</div>
-          </div>
-        </div>
-        <div class="field">
-          <label>Estilo de vida</label>
-          <div class="chips">
-            <div class="chip" onclick="this.classList.toggle('sel')">No fumo</div>
-            <div class="chip" onclick="this.classList.toggle('sel')">Tengo mascota</div>
-            <div class="chip" onclick="this.classList.toggle('sel')">Pareja en casa ok</div>
-            <div class="chip" onclick="this.classList.toggle('sel')">Trabajo desde casa</div>
-            <div class="chip" onclick="this.classList.toggle('sel')">Deportista</div>
-            <div class="chip" onclick="this.classList.toggle('sel')">Me gusta cocinar</div>
-            <div class="chip" onclick="this.classList.toggle('sel')">Sin fiestas entre semana</div>
-            <div class="chip" onclick="this.classList.toggle('sel')">Muy ordenado/a</div>
-          </div>
-        </div>
-        <div class="field">
-          <label>Nivel de limpieza</label>
-          <div class="stars" id="starsEl"></div>
-        </div>
-        <button class="btn-next" onclick="next(3)">Continuar →</button>
-        <button class="btn-back" onclick="back(3)">← Volver</button>
-      </div>
-
-      <!-- PASO 5 VERIFICACIÓN -->
-      <div class="step" id="s4">
-        <div class="step-badge">PASO 5 DE 5</div>
-        <div class="step-title">Verifica tu email</div>
-        <div class="step-sub">Te hemos enviado un código de 6 dígitos para activar tu cuenta.</div>
-        <div class="verify-box">
-          <div class="verify-email" id="emailShow">—</div>
-          <div class="verify-hint">Revisa también la carpeta de spam</div>
-        </div>
-        <div class="field">
-          <label>Código de verificación</label>
-          <input type="text" class="code-input" id="f-codigo" maxlength="6" placeholder="· · · · · ·"/>
-        </div>
-        <div style="font-size:13px;color:var(--muted);margin-bottom:20px">
-          ¿No lo recibiste? <a href="#" onclick="return false">Reenviar código</a>
-        </div>
-        <button class="btn-next" onclick="finish()">Activar y entrar →</button>
-        <button class="btn-back" onclick="back(4)">← Volver</button>
-      </div>
-
-      <!-- ÉXITO -->
-      <div class="step" id="s-ok">
-        <div class="success-wrap">
-          <div class="success-icon">🎉</div>
-          <div class="success-title">¡Bienvenido/a a Convivio!</div>
-          <div class="success-sub">Tu perfil está listo. Empieza a explorar perfiles y encuentra tu compañero/a de piso ideal.</div>
-          <a href="app.html" class="btn-go">Ir a la app →</a>
+          <label>Apellido</label>
+          <input type="text" placeholder="García"/>
         </div>
       </div>
-
+      <div class="field" id="fw-email">
+        <label>Email</label>
+        <input type="email" id="f-email" placeholder="ana@email.com"/>
+        <div class="ferr">Email no válido</div>
+      </div>
+      <div class="field" id="fw-pass">
+        <label>Contraseña</label>
+        <input type="password" id="f-pass" placeholder="Mínimo 8 caracteres"/>
+        <div class="ferr">Mínimo 8 caracteres</div>
+      </div>
+      <button class="btn-next" onclick="next(0)">Continuar →</button>
+      <div class="login-link">¿Ya tienes cuenta? <a href="app.html">Inicia sesión</a></div>
     </div>
+
+    <!-- PASO 1: ROL (bifurcación principal) -->
+    <div class="step" id="s1">
+      <div class="step-badge">PASO 2 DE 5</div>
+      <div class="step-title">¿Qué buscas exactamente?</div>
+      <div class="step-sub">Esto define tu experiencia completa en la app. Podrás cambiarlo más adelante.</div>
+      <div class="rol-grid">
+        <div class="rol-card" id="rol-companero" onclick="selectRol('companero')">
+          <div class="rol-card-icon">🔍</div>
+          <div>
+            <div class="rol-card-title">Busco compañero/a de piso</div>
+            <div class="rol-card-desc">Quiero conocer personas compatibles para compartir piso, ya sea porque tengo uno o porque buscaremos juntos.</div>
+            <div class="rol-card-flow">Perfil → match mutuo → chat → decidir piso</div>
+          </div>
+        </div>
+        <div class="rol-card" id="rol-habitacion" onclick="selectRol('habitacion')">
+          <div class="rol-card-icon">🏠</div>
+          <div>
+            <div class="rol-card-title">Busco habitación libre</div>
+            <div class="rol-card-desc">Necesito donde vivir. Exploro habitaciones disponibles y contacto directamente con quien las ofrece.</div>
+            <div class="rol-card-flow">Buscar pisos → ver compatibilidad → contacto libre</div>
+          </div>
+        </div>
+        <div class="rol-card" id="rol-ofrezco" onclick="selectRol('ofrezco')">
+          <div class="rol-card-icon">🗝</div>
+          <div>
+            <div class="rol-card-title">Ofrezco habitación en mi piso</div>
+            <div class="rol-card-desc">Tengo una habitación libre y quiero elegir a la persona más compatible, no al primero que llegue.</div>
+            <div class="rol-card-flow">Publicar anuncio → recibir candidatos → filtrar por compatibilidad</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn-next" onclick="next(1)">Continuar →</button>
+      <button class="btn-back" onclick="back(1)">← Volver</button>
+    </div>
+
+    <!-- PASO 2: PERFIL PERSONAL -->
+    <div class="step" id="s2">
+      <div class="step-badge">PASO 3 DE 5</div>
+      <div class="step-title" id="s2-title">Tu perfil público</div>
+      <div class="step-sub" id="s2-sub">Lo primero que verán los demás. Sé honesto/a para conseguir mejor compatibilidad.</div>
+      <div class="avatar-wrap">
+        <div class="avatar-circle" id="avatarCircle" onclick="fakePhoto()">
+          <span>📷</span><span>Subir foto</span>
+        </div>
+        <div class="avatar-hint">JPG o PNG · máx. 5MB</div>
+      </div>
+      <div class="row2">
+        <div class="field" id="fw-ciudad">
+          <label>Ciudad</label>
+          <select id="f-ciudad">
+            <option value="">Selecciona...</option>
+            <option>Madrid</option><option>Barcelona</option><option>Valencia</option>
+            <option>Sevilla</option><option>Bilbao</option><option>Málaga</option>
+            <option>Zaragoza</option><option>Granada</option><option>Otra</option>
+          </select>
+          <div class="ferr">Selecciona tu ciudad</div>
+        </div>
+        <div class="field" id="fw-edad">
+          <label>Edad</label>
+          <input type="number" id="f-edad" placeholder="25" min="18" max="80"/>
+          <div class="ferr">Introduce tu edad (18+)</div>
+        </div>
+      </div>
+      <div class="field" id="fw-bio">
+        <label id="bio-label">Cuéntate en dos frases</label>
+        <textarea id="f-bio" placeholder="Soy diseñadora, madrugadora y ordenada. Busco un piso tranquilo en Madrid..."></textarea>
+        <div class="ferr">Añade una bio breve</div>
+      </div>
+      <button class="btn-next" onclick="next(2)">Continuar →</button>
+      <button class="btn-back" onclick="back(2)">← Volver</button>
+    </div>
+
+    <!-- PASO 3: FILTROS DUROS + HÁBITOS + PESOS -->
+    <div class="step" id="s3">
+      <div class="step-badge">PASO 4 DE 5</div>
+      <div class="step-title">Hábitos y compatibilidad</div>
+      <div class="step-sub">Los filtros duros son límites que no negocias. Los hábitos nos dicen cómo eres.</div>
+
+      <!-- FILTROS DUROS -->
+      <div class="hard-filters">
+        <div class="hf-title">FILTROS DUROS <span class="hf-note">Solo ves personas que cumplen esto</span></div>
+        <div class="hf-row">
+          <span class="hf-label">¿Fumas?</span>
+          <div class="toggle-row">
+            <button class="toggle-btn" id="fum-no" onclick="setToggle('fumador','no')">No fumo</button>
+            <button class="toggle-btn" id="fum-si" onclick="setToggle('fumador','si')">Fumo</button>
+            <button class="toggle-btn sel" id="fum-ind" onclick="setToggle('fumador','ind')">Me da igual</button>
+          </div>
+        </div>
+        <div class="hf-row">
+          <span class="hf-label">Mascotas</span>
+          <div class="toggle-row">
+            <button class="toggle-btn" id="masc-ok" onclick="setToggle('mascotas','ok')">Acepto</button>
+            <button class="toggle-btn" id="masc-no" onclick="setToggle('mascotas','no')">No acepto</button>
+            <button class="toggle-btn sel" id="masc-ind" onclick="setToggle('mascotas','ind')">Me da igual</button>
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:0;margin-top:10px">
+          <label>Presupuesto máximo mensual</label>
+          <div class="range-row">
+            <input type="range" id="presup" min="150" max="1500" step="50" value="600" oninput="updPresup()"/>
+            <span class="range-val" id="presup-val">600 €</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- HÁBITOS BLANDOS -->
+      <div class="field">
+        <label>Horario habitual</label>
+        <div class="chips">
+          <div class="chip" onclick="single(this,'horario')">🌅 Madrugador/a</div>
+          <div class="chip" onclick="single(this,'horario')">🌙 Nocturno/a</div>
+          <div class="chip" onclick="single(this,'horario')">⏰ Flexible</div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Nivel de limpieza en casa</label>
+        <div class="stars" id="stars-lim"></div>
+      </div>
+      <div class="field">
+        <label>Nivel de ruido que toleras</label>
+        <div class="stars" id="stars-ruido"></div>
+      </div>
+      <div class="field">
+        <label>Estilo de vida (elige los que aplican)</label>
+        <div class="chips">
+          <div class="chip" onclick="this.classList.toggle('sel')">💻 Teletrabajo</div>
+          <div class="chip" onclick="this.classList.toggle('sel')">🏋 Deportista</div>
+          <div class="chip" onclick="this.classList.toggle('sel')">🍳 Me gusta cocinar</div>
+          <div class="chip" onclick="this.classList.toggle('sel')">🎮 Gamer</div>
+          <div class="chip" onclick="this.classList.toggle('sel')">🐾 Tengo mascota</div>
+          <div class="chip" onclick="this.classList.toggle('sel')">🎉 Sin fiestas entre semana</div>
+          <div class="chip" onclick="this.classList.toggle('sel')">🛋 Introvertido/a</div>
+          <div class="chip" onclick="this.classList.toggle('sel')">👥 Sociable</div>
+        </div>
+      </div>
+
+      <!-- PESOS AJUSTABLES -->
+      <div class="weights-section">
+        <div class="ws-title">¿Qué factores te importan más?</div>
+        <div class="ws-sub">Arrastra para indicar cuánto pesa cada factor en tu compatibilidad. El total se reparte automáticamente.</div>
+        <div class="weight-row">
+          <span class="wr-label">Horario</span>
+          <input type="range" class="wr-slider" data-factor="horario" min="0" max="3" step="1" value="1" oninput="updWeights()"/>
+          <span class="wr-val" id="wv-horario">—</span>
+          <span class="wr-impact" id="wi-horario"></span>
+        </div>
+        <div class="weight-row">
+          <span class="wr-label">Limpieza</span>
+          <input type="range" class="wr-slider" data-factor="limpieza" min="0" max="3" step="1" value="2" oninput="updWeights()"/>
+          <span class="wr-val" id="wv-limpieza">—</span>
+          <span class="wr-impact" id="wi-limpieza"></span>
+        </div>
+        <div class="weight-row">
+          <span class="wr-label">Ruido</span>
+          <input type="range" class="wr-slider" data-factor="ruido" min="0" max="3" step="1" value="1" oninput="updWeights()"/>
+          <span class="wr-val" id="wv-ruido">—</span>
+          <span class="wr-impact" id="wi-ruido"></span>
+        </div>
+        <div class="weight-row">
+          <span class="wr-label">Teletrabajo</span>
+          <input type="range" class="wr-slider" data-factor="teletrabajo" min="0" max="3" step="1" value="0" oninput="updWeights()"/>
+          <span class="wr-val" id="wv-teletrabajo">—</span>
+          <span class="wr-impact" id="wi-teletrabajo"></span>
+        </div>
+      </div>
+
+      <button class="btn-next" onclick="next(3)">Continuar →</button>
+      <button class="btn-back" onclick="back(3)">← Volver</button>
+    </div>
+
+    <!-- PASO 4: VERIFICACIÓN -->
+    <div class="step" id="s4">
+      <div class="step-badge">PASO 5 DE 5</div>
+      <div class="step-title">Verifica tu email</div>
+      <div class="step-sub">Te hemos enviado un código de 6 dígitos. Solo tarda un segundo.</div>
+      <div class="verify-box">
+        <div class="verify-email-display" id="emailShow">—</div>
+        <div class="verify-hint">Revisa también la carpeta de spam</div>
+      </div>
+      <div class="field">
+        <label>Código de verificación</label>
+        <input type="text" class="code-input" id="f-codigo" maxlength="6" placeholder="· · · · · ·"/>
+      </div>
+      <div style="font-size:13px;color:var(--mu);margin-bottom:16px">
+        ¿No lo recibes? <a href="#" onclick="return false">Reenviar código</a>
+      </div>
+
+      <!-- VERIFICACIÓN DNI (opcional, mejora el badge) -->
+      <div style="background:var(--bg);border:1px solid var(--bd);border-radius:var(--r);padding:14px;margin-bottom:16px">
+        <div style="font-size:13px;font-weight:500;margin-bottom:4px">🛡 Verificación avanzada <span style="font-size:11px;color:var(--mu);font-weight:400">(opcional)</span></div>
+        <div style="font-size:12px;color:var(--mu);line-height:1.6;margin-bottom:10px">Sube una foto de tu DNI para conseguir el badge <strong>"Verificado con ID"</strong>. Aumenta mucho la confianza de otros usuarios.</div>
+        <div style="display:flex;gap:8px">
+          <div style="flex:1;border:1px dashed var(--bd);border-radius:8px;padding:10px;text-align:center;font-size:12px;color:var(--mu);cursor:pointer" onclick="this.textContent='✅ DNI subido'">+ Subir DNI</div>
+          <div style="flex:1;border:1px dashed var(--bd);border-radius:8px;padding:10px;text-align:center;font-size:12px;color:var(--mu);cursor:pointer" onclick="this.textContent='✅ Selfie subido'">+ Selfie</div>
+        </div>
+      </div>
+
+      <button class="btn-next" onclick="finish()">Activar cuenta →</button>
+      <button class="btn-back" onclick="back(4)">← Volver</button>
+    </div>
+
+    <!-- ÉXITO -->
+    <div class="step" id="s-ok">
+      <div class="success">
+        <div class="success-icon">🎉</div>
+        <div class="success-title">¡Bienvenido/a a Convivio!</div>
+        <div class="success-sub" id="success-sub">Tu perfil está listo. Empieza a explorar personas compatibles y encuentra tu convivencia ideal.</div>
+        <a href="app.html" class="btn-go">Ir a la app →</a>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
-let currentStep=0;
-let rol='';
-let limpieza=0;
-const TOTAL=5;
+const TOTAL_STEPS = 5;
+let currentStep = 0;
+let rol = '';
+let limp = 0, ruido = 0;
+const toggleState = { fumador: 'ind', mascotas: 'ind' };
+const weightLabels = ['Nada','Poco','Normal','Mucho'];
 
-function renderProgress(n){
-  document.getElementById('progressBar').innerHTML=
-    Array.from({length:TOTAL},(_,i)=>`<div class="pb-dot${i<=n?' done':''}"></div>`).join('');
+// Pesos base fijos (ciudad 30%, presupuesto 25% siempre). Los 45 restantes se reparten.
+const BASE_SOFT = 45;
+
+function renderProgress(n) {
+  document.getElementById('progressBar').innerHTML =
+    Array.from({length:TOTAL_STEPS},(_,i)=>`<div class="pb${i<=n?' done':''}"></div>`).join('');
 }
-function renderStars(v){
-  document.getElementById('starsEl').innerHTML=
-    Array.from({length:5},(_,i)=>`<span class="star${i<v?' on':''}" onclick="setStar(${i+1})">★</span>`).join('');
+
+function renderStars(id, val, setter) {
+  document.getElementById(id).innerHTML =
+    Array.from({length:5},(_,i)=>
+      `<span class="star${i<val?' on':''}" onclick="${setter}(${i+1})"">★</span>`).join('');
 }
-function setStar(v){limpieza=v;renderStars(v);}
+function setLimp(v){limp=v;renderStars('stars-lim',v,'setLimp');}
+function setRuido(v){ruido=v;renderStars('stars-ruido',v,'setRuido');}
+
 function updPresup(){
-  document.getElementById('presup-val').textContent=document.getElementById('presup').value+' €/mes';
+  document.getElementById('presup-val').textContent=document.getElementById('presup').value+' €';
 }
-function setRol(r){
-  rol=r;
-  document.getElementById('rol-b').classList.toggle('sel',r==='b');
-  document.getElementById('rol-p').classList.toggle('sel',r==='p');
+
+function setToggle(group, val) {
+  toggleState[group] = val;
+  const ids = group === 'fumador'
+    ? {no:'fum-no',si:'fum-si',ind:'fum-ind'}
+    : {ok:'masc-ok',no:'masc-no',ind:'masc-ind'};
+  Object.entries(ids).forEach(([k,id])=>{
+    const el = document.getElementById(id);
+    if(el) el.classList.toggle('sel', k===val);
+  });
 }
-function singleChip(el,group){
-  document.querySelectorAll(`[onclick="singleChip(this,'${group}')"]`).forEach(c=>c.classList.remove('sel'));
+
+function single(el, group) {
+  document.querySelectorAll(`[onclick="single(this,'${group}')"]`).forEach(c=>c.classList.remove('sel'));
   el.classList.add('sel');
 }
+
+function updWeights() {
+  const sliders = document.querySelectorAll('.wr-slider');
+  const total = Array.from(sliders).reduce((s,sl)=>s+parseInt(sl.value),0);
+  sliders.forEach(sl => {
+    const f = sl.dataset.factor;
+    const v = parseInt(sl.value);
+    document.getElementById('wv-'+f).textContent = weightLabels[v];
+    const pct = total > 0 ? Math.round((v/total)*BASE_SOFT) : 0;
+    document.getElementById('wi-'+f).textContent = total > 0 ? pct+'pts' : '—';
+  });
+}
+
 function fakePhoto(){
   const a=document.getElementById('avatarCircle');
   a.innerHTML='👤';a.classList.add('has');
 }
 
-function setErr(id,has){
-  const el=document.getElementById(id);
-  if(el)el.classList.toggle('error',has);
+function selectRol(r) {
+  rol = r;
+  ['companero','habitacion','ofrezco'].forEach(x=>{
+    document.getElementById('rol-'+x).classList.toggle('sel',x===r);
+    document.getElementById('lp-'+x).classList.toggle('active',x===r);
+  });
+  // Adaptar paso 3 según rol
+  if (r==='ofrezco') {
+    document.getElementById('s2-title').textContent = 'Tu perfil como anfitrión/a';
+    document.getElementById('s2-sub').textContent = 'Los candidatos verán esto al explorar tu habitación.';
+    document.getElementById('bio-label').textContent = 'Describe el ambiente de tu piso';
+    document.getElementById('f-bio').placeholder = 'Somos 2 personas tranquilas que trabajamos de lunes a viernes. Piso ordenado, sin fiestas...';
+  } else if (r==='habitacion') {
+    document.getElementById('s2-title').textContent = 'Tu perfil de búsqueda';
+    document.getElementById('s2-sub').textContent = 'Los propietarios verán esto cuando les contactes.';
+  } else {
+    document.getElementById('s2-title').textContent = 'Tu perfil público';
+    document.getElementById('s2-sub').textContent = 'Lo primero que verán los demás. Sé honesto/a para conseguir mejor compatibilidad.';
+    document.getElementById('f-bio').placeholder = 'Soy diseñadora, madrugadora y ordenada. Busco un piso tranquilo en Madrid...';
+  }
+  // Adaptar mensaje de éxito
+  const msgs = {
+    companero:'Tu perfil está listo. Empieza a explorar personas compatibles y encuentra tu convivencia ideal.',
+    habitacion:'Tu perfil está listo. Explora habitaciones disponibles y contacta directamente con propietarios.',
+    ofrezco:'Tu anuncio está listo para publicar. Los candidatos te llegarán ordenados por compatibilidad.'
+  };
+  document.getElementById('success-sub').textContent = msgs[r];
 }
 
-function next(step){
+function setErr(id, has) {
+  const el=document.getElementById(id);
+  if(el) el.classList.toggle('err',has);
+}
+
+function next(step) {
   if(step===0){
     const n=document.getElementById('f-nombre').value.trim();
     const e=document.getElementById('f-email').value.trim();
     const p=document.getElementById('f-pass').value;
     let ok=true;
-    setErr('f-nombre-wrap',!n);if(!n)ok=false;
-    setErr('f-email-wrap',!e.includes('@'));if(!e.includes('@'))ok=false;
-    setErr('f-pass-wrap',p.length<8);if(p.length<8)ok=false;
+    setErr('fw-nombre',!n); if(!n)ok=false;
+    setErr('fw-email',!e.includes('@')); if(!e.includes('@'))ok=false;
+    setErr('fw-pass',p.length<8); if(p.length<8)ok=false;
     if(!ok)return;
     document.getElementById('emailShow').textContent=e;
   }
-  if(step===1&&!rol){alert('Selecciona una opción');return;}
+  if(step===1&&!rol){alert('Selecciona qué buscas para continuar');return;}
   if(step===2){
     const c=document.getElementById('f-ciudad').value;
     const ed=document.getElementById('f-edad').value;
     const b=document.getElementById('f-bio').value.trim();
     let ok=true;
-    setErr('f-ciudad-wrap',!c);if(!c)ok=false;
-    setErr('f-edad-wrap',!ed||ed<18);if(!ed||ed<18)ok=false;
-    setErr('f-bio-wrap',!b);if(!b)ok=false;
+    setErr('fw-ciudad',!c); if(!c)ok=false;
+    setErr('fw-edad',!ed||ed<18); if(!ed||ed<18)ok=false;
+    setErr('fw-bio',!b); if(!b)ok=false;
     if(!ok)return;
   }
   goStep(step+1);
 }
 function back(step){goStep(step-1);}
 function goStep(n){
-  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
-  document.getElementById('s'+n).classList.add('active');
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s'+n).classList.add('on');
   currentStep=n;
   renderProgress(n);
   window.scrollTo(0,0);
 }
 function finish(){
   const c=document.getElementById('f-codigo').value;
-  if(c.length<4){return;}
-  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
-  document.getElementById('s-ok').classList.add('active');
+  if(c.length<4)return;
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s-ok').classList.add('on');
   document.getElementById('progressBar').innerHTML='';
 }
 
 renderProgress(0);
-renderStars(0);
+renderStars('stars-lim',0,'setLimp');
+renderStars('stars-ruido',0,'setRuido');
+updWeights();
 </script>
 </body>
 </html>
